@@ -1,0 +1,119 @@
+[
+  {
+    "id": "dekalb-dk771-corn",
+    "name": "Dekalb DK771 Corn",
+    "crop": "Jagung",
+    "startNote": "Hari 0 dihitung dari penanaman benih di lahan. Seluruh angka hari adalah contoh simulasi.",
+    "phases": [
+      {
+        "id": "planting",
+        "name": "Penanaman",
+        "type": "planting",
+        "dayOffset": 0,
+        "productName": null
+      },
+      {
+        "id": "herbicide-application",
+        "name": "Simulasi aplikasi herbisida",
+        "type": "herbicide",
+        "dayOffset": 15,
+        "productName": "Roundup"
+      },
+      {
+        "id": "insecticide-application",
+        "name": "Simulasi aplikasi insektisida",
+        "type": "insecticide",
+        "dayOffset": 45,
+        "productName": "Vayego"
+      },
+      {
+        "id": "fungicide-application",
+        "name": "Simulasi aplikasi fungisida",
+        "type": "fungicide",
+        "dayOffset": 60,
+        "productName": "Nativo"
+      },
+      {
+        "id": "harvest", "name": "Rencana panen", "type": "harvest", "dayOffset": 100, "productName": null,
+        "note": "Titik panen dalam simulasi, bukan prediksi panen nyata. Periksa kematangan dan interval pra-panen pada label produk."
+      }
+    ]
+  },
+  {
+    "id": "padi-demo", "name": "Padi — kalender contoh", "crop": "Padi",
+    "startNote": "Hari 0 adalah tanam di lahan. Umur bibit sebelum tanam tidak dihitung dalam contoh ini.",
+    "phases": [
+      { "id": "planting", "name": "Tanam di lahan", "type": "planting", "dayOffset": 0, "productName": null },
+      { "id": "monitoring", "name": "Pengamatan tanaman dan air", "type": "monitoring", "dayOffset": 10, "productName": null, "note": "Catat kondisi tanaman dan lahan. Pengamatan tidak berarti tanaman harus disemprot." },
+      { "id": "insecticide-application", "name": "Simulasi pengendalian hama", "type": "insecticide", "dayOffset": 30, "productName": null, "note": "Hanya contoh penjadwalan. Aplikasi nyata hanya bila diperlukan dan sesuai label tanaman serta sasaran." },
+      { "id": "fungicide-application", "name": "Simulasi pengendalian penyakit", "type": "fungicide", "dayOffset": 55, "productName": null, "note": "Tidak ada produk atau dosis otomatis yang disarankan untuk kegiatan ini." },
+      { "id": "harvest", "name": "Rencana panen", "type": "harvest", "dayOffset": 110, "productName": null, "note": "Hari panen hanya titik simulasi. Periksa kematangan tanaman dan interval pra-panen produk." }
+    ]
+  },
+  {
+    "id": "cabai-demo", "name": "Cabai — kalender contoh", "crop": "Cabai",
+    "startNote": "Hari 0 dihitung dari pindah tanam ke lahan, bukan dari penyemaian.",
+    "phases": [
+      { "id": "planting", "name": "Pindah tanam", "type": "planting", "dayOffset": 0, "productName": null },
+      { "id": "monitoring", "name": "Pengamatan awal tanaman", "type": "monitoring", "dayOffset": 7, "productName": null },
+      { "id": "insecticide-application", "name": "Simulasi pengendalian hama", "type": "insecticide", "dayOffset": 21, "productName": null },
+      { "id": "fungicide-application", "name": "Simulasi pengendalian penyakit", "type": "fungicide", "dayOffset": 40, "productName": null },
+      { "id": "harvest", "name": "Rencana panen pertama", "type": "harvest", "dayOffset": 80, "productName": null, "note": "Contoh panen pertama. Panen berikutnya dan kematangan aktual tidak diprediksi oleh aplikasi." }
+    ]
+  },
+  {
+    "id": "tomat-demo", "name": "Tomat — kalender contoh", "crop": "Tomat",
+    "startNote": "Hari 0 dihitung dari pindah tanam ke lahan. Semua selang hari adalah contoh.",
+    "phases": [
+      { "id": "planting", "name": "Pindah tanam", "type": "planting", "dayOffset": 0, "productName": null },
+      { "id": "monitoring", "name": "Pengamatan pertumbuhan", "type": "monitoring", "dayOffset": 10, "productName": null },
+      { "id": "insecticide-application", "name": "Simulasi pengendalian hama", "type": "insecticide", "dayOffset": 25, "productName": null },
+      { "id": "fungicide-application", "name": "Simulasi pengendalian penyakit", "type": "fungicide", "dayOffset": 42, "productName": null },
+      { "id": "harvest", "name": "Rencana panen pertama", "type": "harvest", "dayOffset": 75, "productName": null, "note": "Contoh titik panen, bukan jaminan kematangan atau hasil panen." }
+    ]
+  },
+  {
+    "id": "bawang-merah-demo", "name": "Bawang merah — kalender contoh", "crop": "Bawang merah",
+    "startNote": "Hari 0 dihitung dari tanam di lahan. Contoh ini tidak membedakan metode atau varietas.",
+    "phases": [
+      { "id": "planting", "name": "Tanam di lahan", "type": "planting", "dayOffset": 0, "productName": null },
+      { "id": "monitoring", "name": "Pengamatan tanaman", "type": "monitoring", "dayOffset": 7, "productName": null },
+      { "id": "insecticide-application", "name": "Simulasi pengendalian hama", "type": "insecticide", "dayOffset": 20, "productName": null },
+      { "id": "fungicide-application", "name": "Simulasi pengendalian penyakit", "type": "fungicide", "dayOffset": 35, "productName": null },
+      { "id": "harvest", "name": "Rencana panen", "type": "harvest", "dayOffset": 65, "productName": null }
+    ]
+  },
+  {
+    "id": "kedelai-demo", "name": "Kedelai — kalender contoh", "crop": "Kedelai",
+    "startNote": "Hari 0 dihitung dari penanaman benih di lahan. Waktu kegiatan hanya untuk simulasi.",
+    "phases": [
+      { "id": "planting", "name": "Penanaman benih", "type": "planting", "dayOffset": 0, "productName": null },
+      { "id": "monitoring", "name": "Pengamatan tanaman dan gulma", "type": "monitoring", "dayOffset": 12, "productName": null },
+      { "id": "insecticide-application", "name": "Simulasi pengendalian hama", "type": "insecticide", "dayOffset": 30, "productName": null },
+      { "id": "fungicide-application", "name": "Simulasi pengendalian penyakit", "type": "fungicide", "dayOffset": 50, "productName": null },
+      { "id": "harvest", "name": "Rencana panen", "type": "harvest", "dayOffset": 85, "productName": null }
+    ]
+  },
+  {
+    "id": "mentimun-demo", "name": "Mentimun — kalender contoh", "crop": "Mentimun",
+    "startNote": "Hari 0 dihitung dari tanam di lahan. Kalender ini tidak memprediksi umur panen varietas tertentu.",
+    "phases": [
+      { "id": "planting", "name": "Tanam di lahan", "type": "planting", "dayOffset": 0, "productName": null },
+      { "id": "monitoring", "name": "Pengamatan awal tanaman", "type": "monitoring", "dayOffset": 7, "productName": null },
+      { "id": "insecticide-application", "name": "Simulasi pengendalian hama", "type": "insecticide", "dayOffset": 18, "productName": null },
+      { "id": "fungicide-application", "name": "Simulasi pengendalian penyakit", "type": "fungicide", "dayOffset": 32, "productName": null },
+      { "id": "harvest", "name": "Rencana panen pertama", "type": "harvest", "dayOffset": 45, "productName": null }
+    ]
+  },
+  {
+    "id": "semangka-demo", "name": "Semangka — kalender contoh", "crop": "Semangka",
+    "startNote": "Hari 0 dihitung dari tanam di lahan. Gunakan kalender ini untuk mencoba perubahan jadwal.",
+    "phases": [
+      { "id": "planting", "name": "Tanam di lahan", "type": "planting", "dayOffset": 0, "productName": null },
+      { "id": "monitoring", "name": "Pengamatan tanaman", "type": "monitoring", "dayOffset": 10, "productName": null },
+      { "id": "insecticide-application", "name": "Simulasi pengendalian hama", "type": "insecticide", "dayOffset": 22, "productName": null },
+      { "id": "fungicide-application", "name": "Simulasi pengendalian penyakit", "type": "fungicide", "dayOffset": 40, "productName": null },
+      { "id": "harvest", "name": "Rencana panen", "type": "harvest", "dayOffset": 70, "productName": null }
+    ]
+  }
+]

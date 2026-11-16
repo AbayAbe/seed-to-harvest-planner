@@ -1,0 +1,26 @@
+{
+  "name": "seed-to-harvest-planner",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "workspaces": ["frontend", "backend", "shared"],
+  "engines": { "node": "24.x" },
+  "scripts": {
+    "dev": "node scripts/run.mjs dev",
+    "dev:frontend": "npm run dev --workspace @agri/frontend",
+    "dev:backend": "npm run dev --workspace @agri/backend",
+    "build": "npm run build --workspace @agri/backend && npm run build --workspace @agri/frontend",
+    "start": "node scripts/run.mjs start",
+    "start:frontend": "npm run start --workspace @agri/frontend",
+    "start:backend": "npm run start --workspace @agri/backend",
+    "typecheck": "npm run typecheck --workspaces --if-present && tsc --noEmit -p tsconfig.json",
+    "test": "tsx --test tests/*.test.ts",
+    "test:ui": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.65.1",
+    "@types/node": "^24.0.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0"
+  }
+}
