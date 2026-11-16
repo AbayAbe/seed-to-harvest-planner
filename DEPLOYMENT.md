@@ -1,5 +1,36 @@
 # Membagikan aplikasi melalui GitHub dan hosting
 
+## Cara paling mudah: GitHub Pages (demo tanpa backend)
+
+Versi demo sekarang bisa berjalan langsung di GitHub Pages. Tidak memerlukan
+Render, Vercel, API key, atau kartu pembayaran. Pada akun GitHub Free, gunakan
+repositori **Public**. Jangan mengubah repo privat menjadi publik jika berisi data rahasia.
+
+1. Unggah perubahan proyek ke repositori `AbayAbe/seed-to-harvest-planner`.
+2. Di GitHub, buka **Settings → Pages → Build and deployment → Source → GitHub Actions**.
+3. Buka **Actions → Deploy demo ke GitHub Pages → Run workflow → Run workflow**.
+4. Tunggu pekerjaan `build` dan `deploy` berwarna hijau. Buka tautan website
+   pada hasil deploy atau halaman **Settings → Pages**.
+
+Alamat bawaan yang diharapkan: https://abayabe.github.io/seed-to-harvest-planner/
+Setiap push berikutnya ke `main` akan memperbarui website otomatis.
+
+Klik **Buka demo**, lalu **Coba dengan 3 lahan contoh** untuk mencoba fitur.
+Data lahan tersimpan di browser masing-masing; tidak dibagikan antarperangkat.
+Keluar dari demo tidak menghapus lahan. Menghapus data situs menghapus lahan.
+Cuaca masih simulasi, dan demo tidak memverifikasi identitas atau mengirim OTP.
+
+Uji build lokal: `npm run build:pages` (hasil di `frontend/out`). Untuk mengetes
+alamat seperti GitHub Pages, isi `PAGES_BASE_PATH=/seed-to-harvest-planner` saat build,
+lalu jalankan `npm run test:pages`. Tes ini menyajikan hasil build tanpa backend.
+
+Mode backend/frontend terpisah tetap tersedia melalui `npm run dev` dan panduan
+hosting berikut. Workflow GitHub Pages memakai mode demo secara otomatis.
+
+---
+
+## Alternatif: hosting dengan backend terpisah
+
 GitHub menyimpan kode proyek. Orang lain membuka website melalui alamat hosting.
 GitHub Pages melayani situs statis, sedangkan aplikasi ini memerlukan proses
 backend dan database. Rujukan: [GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages).

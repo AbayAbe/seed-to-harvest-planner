@@ -31,7 +31,7 @@ export default function DashboardJuragan({ pengguna, catalog, aktif, onBukaLahan
   }
   return <div>
     <section className="farm-hero" aria-label="Ringkasan lahan">
-      <div><p className="light-eyebrow"><Sprout size={18}/> RUANG KENDALI PEMILIK LAHAN</p><h1>Lahan Anda,<br/>lebih terpantau.</h1><p>Lihat keadaan tiap lahan, lalu tentukan langkah berikutnya.</p><span className="owner-tag">{pengguna.nama} · •••• {pengguna.nomorHp.slice(-4)}</span></div>
+      <div><p className="light-eyebrow"><Sprout size={18}/> RUANG KENDALI PEMILIK LAHAN</p><h1>Lahan Anda,<br/>lebih terpantau.</h1><p>Lihat keadaan tiap lahan, lalu tentukan langkah berikutnya.</p><span className="owner-tag">{pengguna.nama}{process.env.NEXT_PUBLIC_DEMO_STATIC !== "true" && <> · •••• {pengguna.nomorHp.slice(-4)}</>}</span></div>
       <div className="farm-summary"><div><MapPinned size={21}/><strong>{daftar.length}</strong><span>Lahan tersimpan</span></div><div><Sprout size={21}/><strong>{formatQuantity(daftar.reduce((total, item) => total + item.luasHektare, 0))}</strong><span>Total hektare</span></div></div>
     </section>
     <div className="farm-toolbar"><div><h2>Semua lahan saya</h2><p>{daftar.length ? "Pilih lahan untuk melihat rencana tanamnya." : "Mulai dari lahan pertama Anda."}</p></div><div className="flex flex-wrap gap-3"><button type="button" className="reset-button" onClick={() => setPenyegaran((value) => value + 1)}><RefreshCw size={19}/>Perbarui cuaca</button><button ref={tambahRef} type="button" className="primary-button" onClick={() => setFormTerbuka(true)}><Plus size={21}/>Tambah lahan</button></div></div>

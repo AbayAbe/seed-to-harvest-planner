@@ -15,7 +15,9 @@
     "start:backend": "npm run start --workspace @agri/backend",
     "typecheck": "npm run typecheck --workspaces --if-present && tsc --noEmit -p tsconfig.json",
     "test": "tsx --test tests/*.test.ts",
-    "test:ui": "playwright test"
+    "test:ui": "playwright test",
+    "build:pages": "node scripts/build-pages.mjs",
+    "test:pages": "playwright test --config playwright.pages.config.ts"
   },
   "devDependencies": {
     "@playwright/test": "^1.65.1",

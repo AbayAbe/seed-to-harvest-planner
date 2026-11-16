@@ -5,6 +5,18 @@ export class ApiError extends Error {
 }
 /** Same-origin URL; the Next.js proxy forwards this to the separate API service. */
 export async function requestApi<T>(path: string, body?: string, signal?: AbortSignal): Promise<T> {
+  if (process.env.NEXT_PUBLIC_DEMO_STATIC === "true") {
+    signal?.throwIfAborted();
+    const { requestDemo } = await import("./demo-api");
+    signal?.throwIfAborted();
+    try { return await requestDemo(path, body) as T; }
+    catch (error) {
+      if (error && typeof error === "object" && "fields" in error) {
+        throw new ApiError(error instanceof Error ? error.message : "Periksa isian Anda.", (error as { fields?: FormErrors }).fields);
+      }
+      throw error;
+    }
+  }
   // AbortController dasar juga tersedia pada browser Android yang lebih lama.
   const controller = new AbortController();
   const batalkan = () => controller.abort();

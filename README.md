@@ -4,6 +4,17 @@ Aplikasi berbahasa Indonesia untuk manajemen multi-lahan, simulasi cuaca per lok
 jadwal tanam, dan perhitungan campuran satu produk. Frontend dan backend merupakan **dua layanan terpisah** dalam satu
 repositori (npm workspaces).
 
+## Deploy paling mudah: GitHub Pages
+
+Tersedia versi **demo statis tanpa backend**. Cukup unggah proyek, pilih
+**Settings → Pages → Source: GitHub Actions**, lalu jalankan workflow
+**Deploy demo ke GitHub Pages** pada tab **Actions**. Push selanjutnya ke `main`
+akan menerbitkan pembaruan otomatis. [Panduan singkat](DEPLOYMENT.md#cara-paling-mudah-github-pages-demo-tanpa-backend).
+
+Demo dibuka dengan tombol **Buka demo**, tanpa nomor HP. Data lahan hanya tersimpan
+di browser masing-masing dan cuaca tetap simulasi. Tidak memerlukan Render,
+Vercel, atau kartu pembayaran. Build lokal: `npm run build:pages`.
+
 ## Arsitektur
 
 ```text
@@ -22,11 +33,13 @@ shared/   — Kontrak tipe permintaan/respons TypeScript
 tests/    — Pengujian logika, HTTP API, dan browser
 ```
 
-Frontend mengambil katalog dan hasil perhitungan dari backend. Rumus dosis,
+Dalam mode dua layanan, frontend mengambil katalog dan hasil perhitungan dari backend. Rumus dosis,
 algoritma penjadwalan, dan data katalog tidak diimpor ke kode browser.
 Frontend hanya memeriksa isian dasar, mengatur tampilan, dan memformat angka/tanggal.
 Backend selalu memvalidasi ulang data, termasuk permintaan langsung ke API.
 Folder `shared/` hanya berisi tipe; tidak memiliki data atau rumus.
+Khusus mode GitHub Pages, browser memakai modul rumus yang sama secara lokal
+melalui adapter demo, tanpa memuat server Node.js atau database SQLite.
 
 ## Menjalankan dari VS Code
 
