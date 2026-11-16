@@ -89,6 +89,19 @@ aplikasi dalam monorepo.
 | Output Directory | Bawaan Next.js |
 | Environment variable | `BACKEND_URL=https://ALAMAT-BACKEND.onrender.com` |
 
+Perintah install/build di atas juga disimpan dalam `frontend/vercel.json`.
+Gunakan Root Directory `frontend` agar Vercel membaca konfigurasi tersebut.
+`typescript` dan `@types/node` dideklarasikan langsung pada frontend karena
+keduanya diperlukan saat build, termasuk ketika hosting menginstal hanya
+dependensi workspace frontend.
+
+Jika log menampilkan **Please install typescript and @types/node**, pastikan
+commit terbaru mencakup `frontend/package.json`, `package-lock.json`, dan
+`frontend/vercel.json`. Deploy commit terbaru dengan instalasi
+`npm ci --include=dev`; jangan gunakan `--omit=dev` atau `--production`
+pada tahap install/build. Jalankan redeploy tanpa menggunakan build cache lama
+bila error yang sama masih muncul setelah commit terbaru terpasang.
+
 Aktifkan **Include source files outside of the Root Directory in the Build Step**
 bila opsi ini tersedia, karena tipe bersama berada di `shared/`.
 Rujukan: [konfigurasi build](https://vercel.com/docs/builds/configure-a-build)
