@@ -235,3 +235,21 @@ Integrasi MQTT memerlukan kredensial perangkat dan pembatasan akses topik per pe
 menyimpan nama topik belum membuat sensor tersambung.
 
 Untuk mengunggah kode dan membagikan tautan website, lihat [DEPLOYMENT.md](DEPLOYMENT.md).
+
+## Ruang kerja GitHub Pages
+
+Dashboard menyediakan ringkasan luas lahan, pekerjaan terbuka, perkiraan panen
+30 hari, serta biaya kegiatan selesai. Agenda dibuat pengguna secara manual;
+agenda tidak merupakan instruksi penggunaan pestisida. Kegiatan dapat ditandai
+selesai dan dibuka kembali. Pencarian, filter tanaman, pengurutan, ubah lahan,
+serta tautan peta membantu pengelolaan banyak lokasi.
+
+Cadangan JSON mencakup lahan dan agenda. Impor divalidasi dan menampilkan
+pratinjau jumlah data sebelum pengguna memilih penggantian. Penyimpanan memakai
+satu dokumen `agri:workspace:v2`; data lahan versi sebelumnya tetap dapat dibaca
+serta tidak dihapus saat migrasi. Data tetap lokal di browser, tidak tersinkron
+ke server. Gunakan Unduh cadangan untuk pindah perangkat. Cuaca masih simulasi;
+umur tanaman dan perkiraan panen berdasarkan kalender, bukan hasil pengamatan.
+
+Verifikasi versi Pages: `npm run build:pages` dengan
+`PAGES_BASE_PATH=/seed-to-harvest-planner`, kemudian `npm run test:pages`.

@@ -9,6 +9,7 @@ import { useApiQuery } from "../lib/use-api-query";
 import { requestApi } from "../lib/api";
 import LoginNomorHp from "./juragan/login-nomor-hp";
 import DashboardJuragan from "./juragan/dashboard-juragan";
+import DashboardProfesional from "./juragan/dashboard-profesional";
 
 export default function Dashboard() {
   const sesi = useApiQuery<SesiJuragan>("auth/session");
@@ -58,14 +59,14 @@ function RuangJuragan({ pengguna, onKeluar }: { pengguna: Pengguna; onKeluar: ()
       <div className="app-content">
         <header className="topbar juragan-topbar"><p><span className="hidden sm:inline">Perencanaan <span className="mx-3 text-[#708078]">/</span></span><strong>{judul}</strong></p><div className="flex items-center gap-3"><span className="status-pill"><span /> {view === "tank-mix" ? "Dosis dari label" : "Cuaca simulasi"}</span>{process.env.NEXT_PUBLIC_DEMO_STATIC !== "true" && <button type="button" className="logout-button" onClick={keluar} disabled={keluarSibuk}><LogOut size={20}/>{keluarSibuk ? "Tunggu…" : "Keluar"}</button>}</div></header>
         <main id="main-content" tabIndex={-1} className="workspace">
-          {process.env.NEXT_PUBLIC_DEMO_STATIC === "true" && <p className="rounded-xl bg-green-100 p-5 mb-5 text-slate-900"><strong>Penyimpanan di perangkat ini.</strong> Data lahan hanya tersimpan di perangkat ini. Cuaca adalah simulasi. Data hilang jika penyimpanan situs dihapus.</p>}
+          {process.env.NEXT_PUBLIC_DEMO_STATIC === "true" && view !== "lahan" && <p className="rounded-xl bg-green-100 p-5 mb-5 text-slate-900"><strong>Penyimpanan di perangkat ini.</strong> Data lahan hanya tersimpan di perangkat ini. Cuaca adalah simulasi. Data hilang jika penyimpanan situs dihapus.</p>}
           {galatKeluar && <p role="alert" className="error-message mb-5">{galatKeluar}</p>}
           {view !== "lahan" && <div className="page-heading"><div><p className="eyebrow">{view === "timeline" ? "DARI BENIH, SELANGKAH DEMI SELANGKAH" : "PERENCANAAN CAMPURAN"}</p><h1>{view === "timeline" ? "Musim tanam Anda." : "Takaran lebih terencana."}</h1><p>{view === "timeline" ? "Satu tempat untuk mengatur tanggal dan melihat setiap kegiatan." : "Hitung kebutuhan obat dan air sesuai luas lahan serta tangki Anda."}</p></div><div className="heading-mark" aria-hidden="true">{view === "timeline" ? <Sprout size={35} strokeWidth={1.5} /> : <FlaskConical size={35} strokeWidth={1.5} />}</div></div>}
           {view !== "lahan" && lahanAktif && <div className="active-farm-context"><button type="button" className="reset-button" onClick={() => setView("lahan")}><ArrowLeft size={19}/>Semua lahan</button><div><strong>{lahanAktif.nama} · {lahanAktif.lokasi}</strong><p>Rencana dibuka dari data lahan ini. Perubahan pada simulasi di bawah belum disimpan ke lahan.</p></div></div>}
           {catalog.loading && <div className="surface p-6" role="status">Sedang memuat pilihan tanaman dan produk…</div>}
           {catalog.error && <div className="surface p-6"><p role="alert" className="error-message mb-4">{catalog.error}</p><button type="button" className="primary-button" onClick={catalog.retry}>Coba muat lagi</button></div>}
           {catalog.data && <>
-            <div id="lahan-panel" hidden={view !== "lahan"}><DashboardJuragan pengguna={pengguna} catalog={catalog.data} aktif={view === "lahan"} onBukaLahan={bukaLahan}/></div>
+            <div id="lahan-panel" hidden={view !== "lahan"}>{process.env.NEXT_PUBLIC_DEMO_STATIC === "true" ? <DashboardProfesional catalog={catalog.data} onBukaLahan={bukaLahan}/> : <DashboardJuragan pengguna={pengguna} catalog={catalog.data} aktif={view === "lahan"} onBukaLahan={bukaLahan}/>}</div>
             <div id="timeline-panel" hidden={view !== "timeline"}><PlannerTimeline key={lahanAktif?.id ?? "umum"} lahan={lahanAktif} catalog={catalog.data} onOpenCalculator={() => setView("tank-mix")} /></div>
             <div id="tank-mix-panel" hidden={view !== "tank-mix"}><KalkulatorDosis key={lahanAktif?.id ?? "umum"} products={catalog.data.products} luasAwal={lahanAktif?.luasHektare ?? null} /></div>
           </>}

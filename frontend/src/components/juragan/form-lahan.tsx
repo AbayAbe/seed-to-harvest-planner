@@ -13,15 +13,15 @@ const TITIK_CONTOH = [
   { id: "lembang", nama: "Lembang", latitude: -6.817, longitude: 107.616 },
 ];
 const bacaKoordinat = (value: string) => /^-?\d+(?:[.,]\d+)?$/.test(value.trim()) ? Number(value.trim().replace(",", ".")) : NaN;
-export default function FormLahan({ catalog, onSelesai, onBatal }: { catalog: CatalogResponse; onSelesai: () => void; onBatal: () => void }) {
-  const [nama, setNama] = useState("");
-  const [luas, setLuas] = useState("");
-  const [seedId, setSeedId] = useState(catalog.seeds[0]?.id ?? "");
-  const [tanggal, setTanggal] = useState(format(new Date(), "yyyy-MM-dd"));
-  const [titik, setTitik] = useState("");
-  const [lokasi, setLokasi] = useState("");
-  const [latitude, setLatitude] = useState("");
-  const [longitude, setLongitude] = useState("");
+export default function FormLahan({ catalog, onSelesai, onBatal, initial }: { initial?: Lahan; catalog: CatalogResponse; onSelesai: () => void; onBatal: () => void }) {
+  const [nama, setNama] = useState(initial?.nama ?? "");
+  const [luas, setLuas] = useState(initial ? String(initial.luasHektare) : "");
+  const [seedId, setSeedId] = useState(initial?.seedId ?? catalog.seeds[0]?.id ?? "");
+  const [tanggal, setTanggal] = useState(initial?.tanggalTanam ?? format(new Date(), "yyyy-MM-dd"));
+  const [titik, setTitik] = useState(initial ? "manual" : "");
+  const [lokasi, setLokasi] = useState(initial?.lokasi ?? "");
+  const [latitude, setLatitude] = useState(initial ? String(initial.latitude) : "");
+  const [longitude, setLongitude] = useState(initial ? String(initial.longitude) : "");
   const [sibuk, setSibuk] = useState(false);
   const [galat, setGalat] = useState("");
   const namaRef = useRef<HTMLInputElement>(null);
@@ -35,12 +35,12 @@ export default function FormLahan({ catalog, onSelesai, onBatal }: { catalog: Ca
       setGalat("Lengkapi nama, luas, tanaman, dan lokasi lahan."); return;
     }
     setSibuk(true); setGalat("");
-    try { await requestApi<Lahan>("lahan", JSON.stringify(data)); onSelesai(); }
+    try { await requestApi<Lahan>(initial ? `lahan/${initial.id}/edit` : "lahan", JSON.stringify(data)); onSelesai(); }
     catch (error) { setGalat(error instanceof Error ? error.message : "Lahan belum tersimpan."); }
     finally { setSibuk(false); }
   }
-  return <form onSubmit={simpan} className="surface farm-form" aria-label="Tambah lahan" noValidate>
-    <div className="section-kicker"><MapPin size={20}/> LAHAN BARU</div><h2 className="mt-3 text-2xl font-bold">Simpan lahan Anda.</h2>
+  return <form onSubmit={simpan} className="surface farm-form" aria-label={initial ? "Ubah lahan" : "Tambah lahan"} noValidate>
+    <div className="section-kicker"><MapPin size={20}/> {initial ? "UBAH LAHAN" : "LAHAN BARU"}</div><h2 className="mt-3 text-2xl font-bold">Simpan lahan Anda.</h2>
     <fieldset disabled={sibuk} className="mt-6 grid gap-5 sm:grid-cols-2">
       <div><label htmlFor="nama-lahan" className="field-label">Nama lahan</label><input ref={namaRef} id="nama-lahan" className="field-input" value={nama} onChange={(event) => setNama(event.target.value)} placeholder="Contoh: Sawah sebelah utara" maxLength={100}/></div>
       <div><label htmlFor="luas-lahan" className="field-label">Luas lahan (hektare)</label><input id="luas-lahan" className="field-input" inputMode="decimal" value={luas} onChange={(event) => setLuas(event.target.value)} placeholder="Contoh: 2,5"/></div>

@@ -7,28 +7,10 @@ import { evaluateTankMix } from "../../../backend/src/lib/tank-mix/form";
 import { validasiLahan } from "../../../backend/src/juragan/validasi-lahan";
 import { ambilCuacaLahan } from "../../../backend/src/juragan/cuaca";
 
-const DATA_KEY = "agri:pages:lahan:v1";
+import { readWorkspace, writeWorkspace } from "./workspace-store";
 const pengguna: Pengguna = { id: "demo-browser", nama: "Pemilik lahan", nomorHp: "Nomor contoh", dibuatPada: "2026-01-01T00:00:00.000Z" };
-
-/** Demo lokal, bukan autentikasi. Tidak mengirim nomor HP atau data lahan ke server. */
-function readFarms(): Lahan[] {
-  try {
-    const raw = localStorage.getItem(DATA_KEY);
-    if (!raw) return [];
-    const parsed: unknown = JSON.parse(raw);
-    if (!Array.isArray(parsed)) throw new Error();
-    for (const item of parsed) {
-      if (!item || typeof item.id !== "string" || item.penggunaId !== pengguna.id) throw new Error();
-      validasiLahan({ nama: item.nama, lokasi: item.lokasi, luasHektare: item.luasHektare,
-        latitude: item.latitude, longitude: item.longitude, seedId: item.seedId, tanggalTanam: item.tanggalTanam });
-    }
-    return parsed as Lahan[];
-  } catch { throw new Error("Data di browser belum bisa dibaca. Izinkan penyimpanan situs. Data lama tidak dihapus otomatis."); }
-}
-function saveFarms(farms: Lahan[]) {
-  try { localStorage.setItem(DATA_KEY, JSON.stringify(farms)); }
-  catch { throw new Error("Lahan belum tersimpan. Penyimpanan browser penuh atau diblokir. Izinkan penyimpanan situs lalu coba lagi."); }
-}
+function readFarms() { return readWorkspace().farms; }
+function saveFarms(farms: Lahan[]) { writeWorkspace({ ...readWorkspace(), farms }); }
 function makeFarm(data: MasukanLahan): Lahan {
   const id = crypto.randomUUID();
   const hariPanen = SEED_VARIETIES.find(seed => seed.id === data.seedId)!.phases.find(phase => phase.type === "harvest")!.dayOffset;
@@ -58,6 +40,16 @@ export async function requestDemo(path: string, body?: string): Promise<unknown>
     const farm = makeFarm(validasiLahan(JSON.parse(body)));
     saveFarms([...readFarms(), farm]);
     return farm;
+  }
+  const edit = path.match(/^lahan\/([^/]+)\/edit$/);
+  if (edit && body) {
+    const farms = readFarms();
+    const index = farms.findIndex(farm => farm.id === edit[1]);
+    if (index < 0) throw new Error("Lahan tidak ditemukan.");
+    const updated = makeFarm(validasiLahan(JSON.parse(body)));
+    farms[index] = { ...updated, id: farms[index]!.id, dibuatPada: farms[index]!.dibuatPada };
+    saveFarms(farms);
+    return farms[index];
   }
   const weather = path.match(/^lahan\/([^/]+)\/cuaca$/);
   if (weather) {

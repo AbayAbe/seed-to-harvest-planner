@@ -87,7 +87,7 @@ test("lahan versi lama tetap terbaca tanpa sesi login", async ({ page }) => {
 
 test("penyimpanan penuh saat menambah lahan tidak memberi keberhasilan palsu", async ({ page }) => {
   await page.goto(base);
-  await page.getByRole("button", { name: "Tambah lahan", exact: true }).click();
+  await page.getByRole("button", { name: "Tambah lahan", exact: true }).last().click();
   await page.getByLabel("Nama lahan", { exact: true }).fill("Kebun Uji");
   await page.getByRole("form", { name: "Tambah lahan" }).getByLabel("Luas lahan (hektare)", { exact: true }).fill("1,25");
   await page.getByLabel("Tanaman di lahan ini").selectOption("tomat-demo");
@@ -99,11 +99,67 @@ test("penyimpanan penuh saat menambah lahan tidak memberi keberhasilan palsu", a
   await page.evaluate(() => {
     const original = Storage.prototype.setItem;
     Storage.prototype.setItem = function(key, value) {
-      if (key === "agri:pages:lahan:v1") throw new DOMException("Full", "QuotaExceededError");
+      if (key === "agri:workspace:v2") throw new DOMException("Full", "QuotaExceededError");
       return original.call(this, key, value);
     };
   });
   await page.getByRole("button", { name: "Simpan lahan", exact: true }).click();
   await expect(page.getByRole("form", { name: "Tambah lahan" }).getByRole("alert")).toContainText("Lahan belum tersimpan");
   expect(await page.evaluate(() => localStorage.getItem("agri:pages:lahan:v1"))).toBeNull();
+});
+
+test("agenda, biaya, pencarian, dan cadangan bertahan setelah muat ulang", async ({ page }) => {
+  await page.goto(base);
+  await page.getByRole("button", { name: "Coba dengan 3 lahan contoh" }).click();
+  await page.getByRole("button", { name: "Tambah kegiatan", exact: true }).click();
+  await page.getByLabel("Nama kegiatan").fill("Periksa irigasi");
+  await page.getByLabel("Biaya kegiatan (Rp)").fill("150000");
+  await page.getByLabel("Catatan lapangan").fill("Saluran bagian timur");
+  await page.getByRole("button", { name: "Simpan kegiatan" }).click();
+  await expect(page.locator(".pro-agenda-foot")).toContainText("150.000");
+  await page.getByRole("button", { name: "Tandai selesai: Periksa irigasi" }).click();
+  await expect(page.locator(".pro-money")).toContainText("150.000");
+  await page.reload();
+  await page.getByRole("button", { name: "Selesai", exact: true }).click();
+  await expect(page.locator(".pro-activity-list")).toContainText("Saluran bagian timur");
+  await page.getByLabel("Cari lahan", { exact: true }).fill("Padi");
+  await expect(page.locator(".farm-card")).toHaveCount(1);
+  await page.getByLabel("Cari lahan", { exact: true }).fill("");
+  const original = await page.evaluate(() => localStorage.getItem("agri:workspace:v2"));
+  await page.getByLabel("File cadangan").setInputFiles({ name: "bad.json", mimeType: "application/json", buffer: Buffer.from('{"version":2,"farms":[],"kegiatan":[{}]}') });
+  await expect(page.locator("p[role=alert]")).toContainText("tidak valid");
+  expect(await page.evaluate(() => localStorage.getItem("agri:workspace:v2"))).toBe(original);
+  await page.getByLabel("File cadangan").setInputFiles({ name: "empty.json", mimeType: "application/json", buffer: Buffer.from('{"version":2,"farms":[],"kegiatan":[]}') });
+  await expect(page.getByText("Periksa sebelum memulihkan")).toBeVisible();
+  expect(await page.evaluate(() => localStorage.getItem("agri:workspace:v2"))).toBe(original);
+  await page.getByRole("button", { name: "Batal pemulihan" }).click();
+  const downloading = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Unduh cadangan" }).click();
+  expect((await downloading).suggestedFilename()).toMatch(/^lahan-saya-.*\.json$/);
+  await page.getByLabel("File cadangan").setInputFiles({ name: "empty.json", mimeType: "application/json", buffer: Buffer.from('{"version":2,"farms":[],"kegiatan":[]}') });
+  await page.getByRole("button", { name: "Ganti data dengan cadangan ini" }).click();
+  await expect(page.locator(".farm-card")).toHaveCount(0);
+  await page.getByLabel("File cadangan").setInputFiles({ name: "restore.json", mimeType: "application/json", buffer: Buffer.from(original!) });
+  await page.getByRole("button", { name: "Ganti data dengan cadangan ini" }).click();
+  await expect(page.locator(".farm-card")).toHaveCount(3);
+  await expect(page.locator(".pro-money")).toContainText("150.000");
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.screenshot({ path: "output/ui-review/workspace-desktop.png", fullPage: true });
+  await page.setViewportSize({ width: 320, height: 760 });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBeTruthy();
+});
+
+test("ubah lahan mempertahankan identitas dan kegiatan", async ({ page }) => {
+  await page.goto(base);
+  await page.getByRole("button", { name: "Coba dengan 3 lahan contoh" }).click();
+  const before = await page.evaluate(() => JSON.parse(localStorage.getItem("agri:workspace:v2")!).farms.find((f: {nama:string}) => f.nama === "Lahan Padi B"));
+  await page.getByRole("button", { name: "Ubah Lahan Padi B", exact: true }).click();
+  await page.getByRole("form", { name: "Ubah lahan" }).getByLabel("Nama lahan", { exact: true }).fill("Sawah Subang");
+  await page.getByRole("button", { name: "Simpan lahan", exact: true }).click();
+  await expect(page.getByRole("article", { name: "Sawah Subang" })).toBeVisible();
+  const after = await page.evaluate(() => JSON.parse(localStorage.getItem("agri:workspace:v2")!).farms.find((f: {nama:string}) => f.nama === "Sawah Subang"));
+  expect(after.id).toBe(before.id);
+  expect(after.dibuatPada).toBe(before.dibuatPada);
+  await page.reload();
+  await expect(page.getByRole("article", { name: "Sawah Subang" })).toBeVisible();
 });
