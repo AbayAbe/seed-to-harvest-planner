@@ -9,6 +9,7 @@ import { HttpError } from "./http-error.js";
 import { DatabaseJuragan, validasiLahan } from "./juragan/database.js";
 import { cookieSesi, LayananOtp } from "./juragan/otp.js";
 import { buatLayananCuaca, type FetchCuaca } from "./juragan/cuaca.js";
+import { createClinicApp } from "./clinic/router.js";
 
 const BODY_LIMIT = 16 * 1024;
 function send(res: ServerResponse, status: number, payload: unknown) {
@@ -94,9 +95,11 @@ export function createApiServer(options: ApiOptions = {}) {
   const otp = new LayananOtp(database, now);
   const cuaca = buatLayananCuaca(options.fetchCuaca, now);
   const origins = options.allowedOrigins ?? ["http://localhost:3000", "http://127.0.0.1:3000"];
+  const clinic = createClinicApp(origins);
   const server = createServer({ requestTimeout: 10_000, headersTimeout: 5_000, maxHeaderSize: 16_384 }, async (req, res) => {
     try {
       const path = (req.url ?? "/").split("?")[0];
+      if (path === "/api/clinic/identify") { clinic(req, res); return; }
       const weatherMatch = path?.match(/^\/api\/lahan\/([a-f0-9-]{36})\/cuaca$/);
       const methods: Record<string, readonly string[]> = {
         "/api/health": ["GET"], "/api/catalog": ["GET"], "/api/timeline": ["POST"], "/api/tank-mix": ["POST"],

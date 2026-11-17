@@ -1,6 +1,7 @@
 export type * from "./planner.js";
 export type * from "./tank-mix.js";
 export type * from "./juragan.js";
+export type * from "./clinic.js";
 import type { SeedVariety } from "./planner.js";
 import type { DoseUnit } from "./tank-mix.js";
 

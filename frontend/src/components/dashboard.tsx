@@ -52,6 +52,7 @@ function RuangJuragan({ pengguna, onKeluar }: { pengguna: Pengguna; onKeluar: ()
         <p className="sidebar-caption">RUANG KERJA</p>
         <nav aria-label="Menu utama" className="side-nav">
           {navigation.map(({ id, label, detail, Icon }) => <button type="button" key={id} onClick={() => setView(id)} aria-pressed={view === id} aria-controls={`${id}-panel`} className={`nav-item ${view === id ? "is-active" : ""}`}><Icon size={22} /><span><strong>{label}</strong><small>{detail}</small></span><span className="nav-indicator" /></button>)}
+          <a href="./klinik/" className="nav-item"><Leaf size={22}/><span><strong>Klinik tanaman</strong><small>Kenali gejala dari foto</small></span></a>
         </nav>
         <div className="sidebar-bottom"><div className="sidebar-note"><Leaf size={25} /><h2>Kenali produk Anda.</h2><p>Selalu cocokkan penggunaan dengan label produk.</p><a href="https://www.bayer.com/id/id/produk/indonesia-crop-protection" target="_blank" rel="noreferrer">Referensi Bayer <ArrowUpRight size={17} /></a></div><p className="sidebar-foot">Perencanaan pertanian</p></div>
       </aside>

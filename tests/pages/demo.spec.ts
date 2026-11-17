@@ -163,3 +163,18 @@ test("ubah lahan mempertahankan identitas dan kegiatan", async ({ page }) => {
   await page.reload();
   await expect(page.getByRole("article", { name: "Sawah Subang" })).toBeVisible();
 });
+
+test("klinik Pages bekerja tanpa API", async ({ page }) => {
+  await page.goto(base);
+  await page.getByRole("link", { name: /Klinik tanaman/ }).click();
+  await expect(page.getByRole("heading", { name: /Tanaman terpantau/ })).toBeVisible();
+  await expect(page.getByText("Analisis AI", { exact: false }).first()).toBeVisible();
+  await expect(page.getByRole("button", { name: "Simpan catatan", exact: true })).toBeEnabled();
+  await page.getByLabel("Catatan gejala", { exact: true }).fill("Daun bawah menguning");
+  await page.getByRole("button", { name: "Simpan catatan" }).click();
+  await page.reload();
+  await expect(page.getByLabel("Riwayat pengamatan")).toContainText("Daun bawah menguning");
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBeTruthy();
+  await page.getByRole("link", { name: /Kembali ke lahan saya/ }).click();
+  await expect(page.getByRole("button", { name: "Coba dengan 3 lahan contoh" })).toBeVisible();
+});

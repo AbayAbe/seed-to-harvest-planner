@@ -253,3 +253,7 @@ umur tanaman dan perkiraan panen berdasarkan kalender, bukan hasil pengamatan.
 
 Verifikasi versi Pages: `npm run build:pages` dengan
 `PAGES_BASE_PATH=/seed-to-harvest-planner`, kemudian `npm run test:pages`.
+
+Fitur Klinik Tanaman (unggah foto, OpenAI Vision, pencocokan katalog dan dosis
+contoh) tersedia di `/klinik/`. Lihat [panduan Klinik Tanaman](KLINIK-TANAMAN.md)
+untuk konfigurasi API key, backend terpisah, dan GitHub Pages.
