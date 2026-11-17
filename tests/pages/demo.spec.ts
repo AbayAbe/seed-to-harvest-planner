@@ -249,3 +249,26 @@ test("kalkulator membawa total produk tanpa otomatis membebankan biaya",async({p
   await expect(page.getByLabel("Jumlah dipakai (ml / gram)",{exact:true})).toHaveValue("400");
   await expect(page.getByLabel("Transaksi tercatat",{exact:true})).toContainText("Belum ada transaksi");
 });
+
+test("sidebar stays reachable on short screens and retains large touch targets",async({page})=>{
+  await page.setViewportSize({width:1366,height:768});await page.goto(base);
+  await expect(page.getByRole("button",{name:"Coba dengan 3 lahan contoh"})).toBeVisible();
+  await page.screenshot({path:"output/ui-review/sidebar-desktop.png"});
+  for(const height of [600,420]){
+    await page.setViewportSize({width:1024,height});
+    const footer=page.getByRole("link",{name:/Panduan produk/});
+    const footerBox=await footer.boundingBox();expect(footerBox!.y).toBeGreaterThanOrEqual(0);expect(footerBox!.y+footerBox!.height).toBeLessThanOrEqual(height);
+    await page.getByRole("button",{name:/Lahan saya/}).focus();
+    const last=page.getByRole("link",{name:/Riwayat penyakit/});await last.focus();
+    const bounds=await last.boundingBox();const scroll=await page.locator('.sidebar-scroll').boundingBox();
+    expect(bounds!.y).toBeGreaterThanOrEqual(scroll!.y-1);expect(bounds!.y+bounds!.height).toBeLessThanOrEqual(scroll!.y+scroll!.height+1);
+    expect(bounds!.height).toBeGreaterThanOrEqual(64);
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBeTruthy();
+  }
+  await page.screenshot({path:"output/ui-review/sidebar-short.png"});
+  await page.setViewportSize({width:390,height:844});await page.evaluate(()=>scrollTo(0,0));
+  await page.screenshot({path:"output/ui-review/sidebar-mobile.png"});
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBeTruthy();
+  await page.getByRole("button",{name:/Jadwal tanam/}).click();
+  await expect(page.getByRole("button",{name:/Jadwal tanam/})).toHaveAttribute("aria-pressed","true");
+});

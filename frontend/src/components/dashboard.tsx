@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ArrowLeft, ArrowUpRight, CalendarDays, FlaskConical, Leaf, LogOut, MapPinned, Sprout } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, CalendarDays, FlaskConical, Leaf, LogOut, MapPinned, Sprout, Wallet, History, Stethoscope } from "lucide-react";
 import KalkulatorDosis from "./tank-mix-calculator";
 import PlannerTimeline from "./planner-timeline";
 import type { CatalogResponse, Lahan, Pengguna, SesiJuragan } from "@agri/contracts";
@@ -47,16 +47,18 @@ function RuangJuragan({ pengguna, onKeluar }: { pengguna: Pengguna; onKeluar: ()
   return (
     <div className="app-shell">
       <a className="skip-link" href="#main-content">Langsung ke isi</a>
-      <aside className="sidebar">
+      <aside className="sidebar" aria-label="Navigasi Cyphera">
         <div className="brand"><span className="brand-mark"><Sprout size={25} /></span><div><strong>Cyphera<span className="brand-dot">.</span></strong><span>Perencana tani</span></div></div>
+        <div className="sidebar-scroll" role="region" aria-label="Daftar menu Cyphera" tabIndex={0}>
         <p className="sidebar-caption">RUANG KERJA</p>
         <nav aria-label="Menu utama" className="side-nav">
           {navigation.map(({ id, label, detail, Icon }) => <button type="button" key={id} onClick={() => setView(id)} aria-pressed={view === id} aria-controls={`${id}-panel`} className={`nav-item ${view === id ? "is-active" : ""}`}><Icon size={22} /><span><strong>{label}</strong><small>{detail}</small></span><span className="nav-indicator" /></button>)}
-          <a href="./klinik/" className="nav-item"><Leaf size={22}/><span><strong>Klinik tanaman</strong><small>Kenali gejala dari foto</small></span></a>
-          <a href="./keuangan/" className="nav-item"><Sprout size={22}/><span><strong>Buku kas tani</strong><small>Biaya, pendapatan, ROI</small></span></a>
-          <a href="./riwayat/" className="nav-item"><MapPinned size={22}/><span><strong>Riwayat penyakit</strong><small>Pantau pola per lahan</small></span></a>
+          <a href="./klinik/" className="nav-item"><Stethoscope size={22}/><span><strong>Klinik tanaman</strong><small>Kenali gejala dari foto</small></span></a>
+          <a href="./keuangan/" className="nav-item"><Wallet size={22}/><span><strong>Buku kas tani</strong><small>Biaya, pendapatan, ROI</small></span></a>
+          <a href="./riwayat/" className="nav-item"><History size={22}/><span><strong>Riwayat penyakit</strong><small>Pantau pola per lahan</small></span></a>
         </nav>
-        <div className="sidebar-bottom"><div className="sidebar-note"><Leaf size={25} /><h2>Kenali produk Anda.</h2><p>Selalu cocokkan penggunaan dengan label produk.</p><a href="https://www.bayer.com/id/id/produk/indonesia-crop-protection" target="_blank" rel="noreferrer">Referensi Bayer <ArrowUpRight size={17} /></a></div><p className="sidebar-foot">Perencanaan pertanian</p></div>
+        </div>
+        <div className="sidebar-bottom"><a className="sidebar-reference" href="https://www.bayer.com/id/id/produk/indonesia-crop-protection" target="_blank" rel="noreferrer"><span className="sidebar-reference-icon"><Leaf size={20}/></span><span><strong>Panduan produk</strong><small>Referensi resmi Bayer</small></span><ArrowUpRight size={18}/><span className="sr-only"> (buka tab baru)</span></a><p className="sidebar-foot">Cyphera / Ruang kerja pertanian</p></div>
       </aside>
 
       <div className="app-content">
