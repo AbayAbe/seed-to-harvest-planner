@@ -1,10 +1,11 @@
-import express, { type ErrorRequestHandler } from "express";
+import express, { type ErrorRequestHandler, type Request } from "express";
+import type { ClinicAnalysis } from "@agri/contracts";
 import multer from "multer";
 import sharp from "sharp";
 import { rateLimit } from "express-rate-limit";
 import { analysisSchema, ClinicError, createVisionAnalyzer, inputSchema, matchCatalog, type VisionAnalyzer } from "./service.js";
 
-export function createClinicApp(origins: readonly string[], analyze: VisionAnalyzer = createVisionAnalyzer()) {
+export function createClinicApp(origins: readonly string[], analyze: VisionAnalyzer = createVisionAnalyzer(), history?: (req:Request, farmId:string, analysisId:string)=>(analysis:ClinicAnalysis)=>void) {
   const app = express();
   app.disable("x-powered-by");
   // Do not trust arbitrary X-Forwarded-For headers. Configure a known proxy only when deployed.
@@ -18,7 +19,7 @@ export function createClinicApp(origins: readonly string[], analyze: VisionAnaly
   });
   app.use(rateLimit({ windowMs: 15 * 60_000, limit: 10, standardHeaders: "draft-7", legacyHeaders: false,
     message: { error: { code: "RATE_LIMIT", message: "Terlalu banyak permintaan. Coba lagi dalam 15 menit." } } }));
-  const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 5 * 1024 * 1024, files: 1, fields: 2, parts: 3, fieldSize: 100 },
+  const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 5 * 1024 * 1024, files: 1, fields: 4, parts: 5, fieldSize: 100 },
     fileFilter: (_req, file, cb) => {
       if (!["image/jpeg", "image/png", "image/webp"].includes(file.mimetype)) return cb(new ClinicError(415, "IMAGE_FORMAT", "Gunakan foto JPG, PNG, atau WebP."));
       cb(null, true);
@@ -34,6 +35,8 @@ export function createClinicApp(origins: readonly string[], analyze: VisionAnaly
   }, upload.single("image"), async (req, res) => {
     const input = inputSchema.safeParse(req.body);
     if (!input.success) throw new ClinicError(400, "INPUT_INVALID", "Pilih tanaman dan isi kapasitas tangki 1–100 liter.");
+    if(history && (!input.data.farmId || !input.data.analysisId)) throw new ClinicError(400,"FARM_REQUIRED","Pilih lahan dan sertakan ID analisis.");
+    const saveHistory=history ? history(req,input.data.farmId!,input.data.analysisId!) : undefined;
     if (!req.file) throw new ClinicError(400, "IMAGE_REQUIRED", "Pilih satu foto tanaman terlebih dahulu.");
     let image: Buffer;
     try {
@@ -50,6 +53,7 @@ export function createClinicApp(origins: readonly string[], analyze: VisionAnaly
     res.once("close", cancel);
     try {
       const analysis = analysisSchema.parse(await analyze(image, input.data.crop, controller.signal));
+      if(analysis.status==="suspected" && analysis.diseaseCode!=="none" && analysis.observedCrop===input.data.crop) saveHistory?.(analysis);
       if (!res.destroyed) res.json(matchCatalog(analysis, input.data.crop, input.data.tankLiters));
     } finally { clearTimeout(timer); res.off("close", cancel); }
   });

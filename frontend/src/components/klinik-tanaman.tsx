@@ -28,7 +28,7 @@ function isResult(value: unknown): value is ClinicResult {
     && typeof r.product.name === "string" && typeof r.product.instruction === "string");
 }
 
-export default function KlinikTanaman() {
+export default function KlinikTanaman({ farmId }: { farmId?: string } = {}) {
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState("");
   const [crop, setCrop] = useState<ClinicCrop>("tomat");
@@ -38,6 +38,8 @@ export default function KlinikTanaman() {
   const [result, setResult] = useState<ClinicResult | null>(null);
   const camera = useRef<HTMLInputElement>(null), upload = useRef<HTMLInputElement>(null);
   const request = useRef<AbortController | null>(null);
+  const analysisId = useRef("");
+  useEffect(() => { analysisId.current = ""; }, [file, crop, farmId]);
   const resultRef = useRef<HTMLElement>(null);
   useEffect(() => {
     if (!file) { setPreview(""); return; }
@@ -59,6 +61,7 @@ export default function KlinikTanaman() {
     if (busy || request.current) return;
     setError(""); setResult(null);
     if (!file) { setError("Pilih foto tanaman terlebih dahulu."); return; }
+    if (!farmId) { setError("Pilih lahan dari dashboard sebelum mengaktifkan analisis AI."); return; }
     if (!/^\d+(?:[.,]\d{1,2})?$/.test(tank) || Number(tank.replace(",", ".")) < 1 || Number(tank.replace(",", ".")) > 100) { setError("Isi kapasitas tangki antara 1 dan 100 liter."); return; }
     if (unavailable) { setError("Backend Klinik Tanaman belum terhubung. Pengelola perlu mengatur alamat API terlebih dahulu."); return; }
     const controller = new AbortController(); request.current = controller;
@@ -66,7 +69,9 @@ export default function KlinikTanaman() {
     setBusy(true);
     try {
       const body = new FormData(); body.append("image", file); body.append("crop", crop); body.append("tankLiters", tank);
-      const response = await fetch(`${backend}/api/clinic/identify`, { method: "POST", body, signal: controller.signal, credentials: "omit" });
+      analysisId.current ||= crypto.randomUUID();
+      body.append("farmId", farmId); body.append("analysisId", analysisId.current);
+      const response = await fetch(`${backend}/api/clinic/identify`, { method: "POST", body, signal: controller.signal, credentials: "same-origin" });
       if (!response.headers.get("content-type")?.includes("application/json")) throw new Error("Layanan mengembalikan respons yang tidak dikenal. Periksa konfigurasi backend.");
       const payload: unknown = await response.json();
       if (!response.ok) {

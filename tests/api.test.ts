@@ -93,5 +93,5 @@ test("native API delegates clinic multipart requests to Express", async () => {
   const data = new FormData(); data.set("crop", "tomat"); data.set("tankLiters", "16");
   const response = await fetch(`${base}/api/clinic/identify`, { method: "POST", body: data });
   assert.equal(response.status, 400);
-  assert.equal((await response.json()).error.code, "IMAGE_REQUIRED");
+  assert.equal((await response.json()).error.code, "FARM_REQUIRED");
 });

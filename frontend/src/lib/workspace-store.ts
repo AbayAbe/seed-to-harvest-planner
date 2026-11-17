@@ -1,13 +1,15 @@
 import type { Lahan } from "@agri/contracts";
 import { validasiLahan } from "../../../backend/src/juragan/validasi-lahan";
 import { parseCalendarDate } from "../../../backend/src/lib/planner/dates";
+import { validateRecords } from "../../../backend/src/records/domain";
+import type { FarmRecords } from "@agri/contracts";
 
 export const WORKSPACE_KEY = "agri:workspace:v2";
 export interface Kegiatan {
   id: string; lahanId: string; judul: string; tanggal: string; catatan: string;
   biaya: number; selesai: boolean;
 }
-export interface Workspace { version: 2; farms: Lahan[]; kegiatan: Kegiatan[] }
+export interface Workspace { version: 2; farms: Lahan[]; kegiatan: Kegiatan[]; records: FarmRecords }
 const fail = () => { throw new Error("Isi cadangan tidak valid. Data Anda belum diubah."); };
 function text(value: unknown, max: number): value is string { return typeof value === "string" && value.length <= max; }
 
@@ -38,7 +40,7 @@ export function validateWorkspace(raw: unknown): Workspace {
     return { id: item.id, lahanId: item.lahanId, judul: item.judul.trim(), catatan: item.catatan,
       tanggal: item.tanggal, biaya: item.biaya, selesai: item.selesai };
   });
-  return { version: 2, farms, kegiatan };
+  return { version: 2, farms, kegiatan, records: validateRecords(data.records, ids) };
 }
 export function readWorkspace(): Workspace {
   try {
@@ -50,7 +52,7 @@ export function readWorkspace(): Workspace {
 }
 export function writeWorkspace(data: Workspace) {
   const valid = validateWorkspace(data);
-  try { localStorage.setItem(WORKSPACE_KEY, JSON.stringify(valid)); }
+  try { const json = JSON.stringify(valid); if (new Blob([json]).size > 2_000_000) throw new Error("capacity"); localStorage.setItem(WORKSPACE_KEY, json); }
   catch { throw new Error("Lahan belum tersimpan. Penyimpanan browser penuh atau diblokir. Unduh cadangan sebelum mengosongkan penyimpanan."); }
 }
 export function parseBackup(raw: string): Workspace {

@@ -10,6 +10,10 @@ import { DatabaseJuragan, validasiLahan } from "./juragan/database.js";
 import { cookieSesi, LayananOtp } from "./juragan/otp.js";
 import { buatLayananCuaca, type FetchCuaca } from "./juragan/cuaca.js";
 import { createClinicApp } from "./clinic/router.js";
+import { createRecordsApp } from "./records/router.js";
+import { ClinicError } from "./clinic/service.js";
+import type { VisionAnalyzer } from "./clinic/service.js";
+import { randomUUID } from "node:crypto";
 
 const BODY_LIMIT = 16 * 1024;
 function send(res: ServerResponse, status: number, payload: unknown) {
@@ -83,6 +87,7 @@ function tankMix(body: Record<string, unknown>) {
 
 /** Independent HTTP application: no Next.js or browser dependencies. */
 export interface ApiOptions {
+  analyzeVision?: VisionAnalyzer;
   databasePath?: string;
   now?: () => number;
   fetchCuaca?: FetchCuaca;
@@ -95,10 +100,17 @@ export function createApiServer(options: ApiOptions = {}) {
   const otp = new LayananOtp(database, now);
   const cuaca = buatLayananCuaca(options.fetchCuaca, now);
   const origins = options.allowedOrigins ?? ["http://localhost:3000", "http://127.0.0.1:3000"];
-  const clinic = createClinicApp(origins);
+  const records = createRecordsApp(database.records, req=>otp.wajibMasuk(req).id, id=>database.daftarLahan(id), origins);
+  const clinic = createClinicApp(origins, options.analyzeVision, (req,farmId,analysisId)=>{
+    let userId:string;
+    try { userId=otp.wajibMasuk(req).id; database.lahanMilik(userId,farmId); }
+    catch(e){throw new ClinicError(e instanceof HttpError?e.status:401,"HISTORY_ACCESS","Masuk dan pilih lahan milik Anda sebelum analisis.");}
+    return analysis=>{database.records.addDisease(userId,{id:randomUUID(),farmId,date:new Date(now()).toLocaleDateString("en-CA",{timeZone:"Asia/Jakarta"}),disease:analysis.diseaseName,note:analysis.cause,source:"ai",analysisId});};
+  });
   const server = createServer({ requestTimeout: 10_000, headersTimeout: 5_000, maxHeaderSize: 16_384 }, async (req, res) => {
     try {
       const path = (req.url ?? "/").split("?")[0];
+      if(path==="/api/records" || path?.startsWith("/api/records/")){records(req,res);return;}
       if (path === "/api/clinic/identify") { clinic(req, res); return; }
       const weatherMatch = path?.match(/^\/api\/lahan\/([a-f0-9-]{36})\/cuaca$/);
       const methods: Record<string, readonly string[]> = {

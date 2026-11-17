@@ -143,3 +143,8 @@ Referensi implementasi:
 - [OpenAI Vision](https://developers.openai.com/api/docs/guides/images-vision)
 - [Structured outputs](https://developers.openai.com/api/docs/guides/structured-outputs)
 - [Multer](https://expressjs.com/en/resources/middleware/multer/)
+
+Pembaruan riwayat per lahan: server utama sekarang membutuhkan `farmId`,
+`analysisId` (UUID), dan sesi pemilik pada endpoint Vision. Lihat
+[BUKU-KAS-RIWAYAT.md](BUKU-KAS-RIWAYAT.md) untuk kontrak terbaru dan log otomatis.
+Dashboard Pages tetap tidak memanggil AI.

@@ -178,3 +178,74 @@ test("klinik Pages bekerja tanpa API", async ({ page }) => {
   await page.getByRole("link", { name: /Kembali ke lahan saya/ }).click();
   await expect(page.getByRole("button", { name: "Coba dengan 3 lahan contoh" })).toBeVisible();
 });
+
+test("buku kas dan riwayat penyakit berjalan lokal serta ikut cadangan", async ({ page }) => {
+  const apiCalls: string[] = [];page.on("request",r=>{if(r.url().includes("/api/"))apiCalls.push(r.url());});
+  await page.goto(base);await page.getByRole("button",{name:"Coba dengan 3 lahan contoh"}).click();
+  await page.getByRole("link",{name:/Buku kas tani/}).click();
+  await expect(page.getByRole("button",{name:"Simpan harga produk"})).toBeEnabled();
+  await page.getByLabel("Nama produk harga",{exact:true}).fill("Produk uji cair");
+  await page.getByLabel("Isi kemasan",{exact:true}).fill("1000");
+  await page.getByLabel("Harga kemasan (Rp)",{exact:true}).fill("150000");
+  await page.getByRole("button",{name:"Simpan harga produk"}).click();
+  await page.getByRole("combobox",{name:"Lahan transaksi",exact:true}).selectOption({label:"Lahan Jagung A"});
+  await page.getByLabel("Jumlah dipakai (ml)",{exact:true}).fill("320");
+  await page.getByRole("button",{name:"Simpan transaksi"}).click();
+  await expect(page.getByLabel("Transaksi tercatat",{exact:true})).toContainText("48.000");
+  await page.getByRole("combobox",{name:"Jenis transaksi",exact:true}).selectOption("income");
+  await page.getByLabel("Jumlah rupiah",{exact:true}).fill("96000");
+  await page.getByRole("button",{name:"Simpan transaksi"}).click();
+  await expect(page.getByText("100%",{exact:true}).first()).toBeVisible();
+  await page.reload();await expect(page.getByText("100%",{exact:true}).first()).toBeVisible();
+  await page.setViewportSize({width:1440,height:1000});await page.screenshot({path:"output/ui-review/finance-desktop.png",fullPage:true});
+  await page.setViewportSize({width:390,height:844});expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBeTruthy();
+  await page.screenshot({path:"output/ui-review/finance-mobile.png",fullPage:true});
+  await page.getByRole("link",{name:"Riwayat penyakit",exact:true}).click();
+  await expect(page.getByRole("button",{name:"Simpan pengamatan"})).toBeEnabled();
+  await page.getByRole("combobox",{name:"Lahan pengamatan",exact:true}).selectOption({label:"Lahan Jagung A"});
+  for(const symptom of ["Bercak daun","bercak daun"]){await page.getByLabel("Gejala atau nama penyakit",{exact:true}).fill(symptom);await page.getByRole("button",{name:"Simpan pengamatan"}).click();await expect(page.getByLabel("Gejala atau nama penyakit",{exact:true})).toHaveValue("");}
+  await expect(page.getByLabel("Frekuensi per lahan",{exact:true})).toContainText("2 catatan");
+  await expect(page.getByLabel("Frekuensi per lahan",{exact:true})).toContainText("Manual 2");
+  await page.reload();await expect(page.getByLabel("Frekuensi per lahan",{exact:true})).toContainText("2 catatan");
+  await page.screenshot({path:"output/ui-review/disease-mobile.png",fullPage:true});
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBeTruthy();
+  await page.getByRole("combobox",{name:"Filter lahan",exact:true}).selectOption({label:"Lahan Padi B"});
+  await expect(page.getByLabel("Frekuensi per lahan",{exact:true})).toContainText("Belum ada pola");
+  await page.getByRole("link",{name:/Lahan saya/}).click();
+  const backup=await page.evaluate(()=>localStorage.getItem("agri:workspace:v2")!);
+  expect(JSON.parse(backup).records.cash).toHaveLength(2);expect(JSON.parse(backup).records.diseases).toHaveLength(2);
+  await page.getByLabel("File cadangan").setInputFiles({name:"restore.json",mimeType:"application/json",buffer:Buffer.from(backup)});
+  await page.getByRole("button",{name:"Ganti data dengan cadangan ini"}).click();
+  expect(JSON.parse(await page.evaluate(()=>localStorage.getItem("agri:workspace:v2")!)).records.cash).toHaveLength(2);
+  expect(apiCalls).toEqual([]);
+});
+
+test("buku kas menolak jumlah invalid dan kegagalan penyimpanan",async({page})=>{
+  await page.goto(base);await page.getByRole("button",{name:"Coba dengan 3 lahan contoh"}).click();
+  await page.getByRole("link",{name:/Buku kas tani/}).click();
+  await page.getByRole("button",{name:"Simpan transaksi"}).click();
+  await expect(page.locator("p[role=alert]")).toContainText("Pilih harga produk");
+  await page.getByRole("combobox",{name:"Jenis transaksi",exact:true}).selectOption("income");
+  await page.getByLabel("Jumlah rupiah",{exact:true}).fill("-1");await page.getByRole("button",{name:"Simpan transaksi"}).click();
+  await expect(page.locator("p[role=alert]")).toContainText("rupiah");
+  await page.getByLabel("Jumlah rupiah",{exact:true}).fill("100000");
+  await page.evaluate(()=>{Storage.prototype.setItem=()=>{throw new DOMException("Full","QuotaExceededError");};});
+  await page.getByRole("button",{name:"Simpan transaksi"}).click();
+  await expect(page.locator("p[role=alert]")).toContainText("belum tersimpan");
+  await expect(page.getByLabel("Transaksi tercatat",{exact:true})).toContainText("Belum ada transaksi");
+});
+
+test("kalkulator membawa total produk tanpa otomatis membebankan biaya",async({page})=>{
+  await page.goto(base);await page.getByRole("button",{name:"Coba dengan 3 lahan contoh"}).click();
+  await page.getByRole("navigation",{name:"Menu utama"}).getByRole("button",{name:/Kalkulator dosis/}).click();
+  await page.getByLabel("Produk Bayer").selectOption("nativo");
+  await page.getByLabel("Luas lahan (hektare)",{exact:true}).fill("1");
+  await page.getByLabel("Kapasitas tangki (liter)").fill("15");
+  await page.getByLabel("Dosis produk (gram/ha)").fill("400");
+  await page.getByLabel("Air per hektare (liter/ha)").fill("200");
+  await page.getByRole("button",{name:"Hitung campuran",exact:true}).click();
+  await page.getByRole("button",{name:"Catat biaya di Buku Kas"}).click();
+  await expect(page.getByText(/Dari kalkulator:/)).toContainText("400 g");
+  await expect(page.getByLabel("Jumlah dipakai (ml / gram)",{exact:true})).toHaveValue("400");
+  await expect(page.getByLabel("Transaksi tercatat",{exact:true})).toContainText("Belum ada transaksi");
+});

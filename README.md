@@ -257,3 +257,7 @@ Verifikasi versi Pages: `npm run build:pages` dengan
 Fitur Klinik Tanaman (unggah foto, OpenAI Vision, pencocokan katalog dan dosis
 contoh) tersedia di `/klinik/`. Lihat [panduan Klinik Tanaman](KLINIK-TANAMAN.md)
 untuk konfigurasi API key, backend terpisah, dan GitHub Pages.
+
+Buku Kas Tani dan Riwayat Penyakit tersedia di `/keuangan/` dan `/riwayat/`.
+Keduanya bekerja lokal pada GitHub Pages dan ikut cadangan lahan.
+Lihat [skema, endpoint, dan panduan fitur](BUKU-KAS-RIWAYAT.md).

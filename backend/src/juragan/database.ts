@@ -6,15 +6,18 @@ import type { Lahan, MasukanLahan, Pengguna } from "@agri/contracts";
 import { SKEMA_JURAGAN } from "./skema.js";
 import { SEED_VARIETIES } from "../lib/planner/seed-data.js";
 import { HttpError } from "../http-error.js";
+import { RecordsRepository } from "../records/repository.js";
 
 export { validasiLahan } from "./validasi-lahan.js";
 
 export class DatabaseJuragan {
   private readonly db: DatabaseSync;
+  readonly records: RecordsRepository;
   constructor(path = ":memory:") {
     if (path !== ":memory:") mkdirSync(dirname(path), { recursive: true });
     this.db = new DatabaseSync(path);
     this.db.exec(SKEMA_JURAGAN);
+    this.records = new RecordsRepository(this.db);
   }
   tutup() { this.db.close(); }
   penggunaUntukNomor(nomorHp: string, now: number): Pengguna {

@@ -15,6 +15,8 @@ export const analysisSchema = z.object({
   confidence: z.enum(["low", "medium", "high"]), nextStep: z.string().max(800),
 }).strict();
 export const inputSchema = z.object({
+  farmId: z.string().min(1).max(100).optional(),
+  analysisId: z.string().uuid().optional(),
   crop: z.enum(["tomat", "padi", "cabai", "jagung", "lainnya"]),
   tankLiters: z.string().regex(/^\d+(?:[.,]\d{1,2})?$/).transform(s => Number(s.replace(",", "."))).pipe(z.number().min(1).max(100)),
 }).strict();
