@@ -8,8 +8,7 @@ import { validasiLahan } from "../../../backend/src/juragan/validasi-lahan";
 import { ambilCuacaLahan } from "../../../backend/src/juragan/cuaca";
 
 const DATA_KEY = "agri:pages:lahan:v1";
-const SESSION_KEY = "agri:pages:sesi:v1";
-const pengguna: Pengguna = { id: "demo-browser", nama: "Pengguna demo", nomorHp: "Nomor contoh", dibuatPada: "2026-01-01T00:00:00.000Z" };
+const pengguna: Pengguna = { id: "demo-browser", nama: "Pemilik lahan", nomorHp: "Nomor contoh", dibuatPada: "2026-01-01T00:00:00.000Z" };
 
 /** Demo lokal, bukan autentikasi. Tidak mengirim nomor HP atau data lahan ke server. */
 function readFarms(): Lahan[] {
@@ -35,21 +34,10 @@ function makeFarm(data: MasukanLahan): Lahan {
   const hariPanen = SEED_VARIETIES.find(seed => seed.id === data.seedId)!.phases.find(phase => phase.type === "harvest")!.dayOffset;
   return { ...data, id, penggunaId: pengguna.id, hariPanen, topikMqtt: null, dibuatPada: new Date().toISOString() };
 }
-function session(active?: boolean) {
-  try {
-    if (active === true) sessionStorage.setItem(SESSION_KEY, "aktif");
-    if (active === false) sessionStorage.removeItem(SESSION_KEY);
-    return sessionStorage.getItem(SESSION_KEY) === "aktif";
-  } catch { throw new Error("Izinkan penyimpanan situs di browser agar demo dapat dibuka."); }
-}
-
 /** Adapter untuk versi GitHub Pages; rumus dan katalog memakai modul yang sama dengan backend. */
 export async function requestDemo(path: string, body?: string): Promise<unknown> {
   path = path.split("?")[0]!;
-  if (path === "auth/session") return { pengguna: session() ? pengguna : null, mode: "simulasi" };
-  if (path === "auth/demo" && body !== undefined) { session(true); return { pengguna, mode: "simulasi" }; }
-  if (path === "auth/logout") { session(false); return { selesai: true }; }
-  if (!session()) throw new Error("Buka demo terlebih dahulu.");
+  if (path === "auth/session") return { pengguna, mode: "simulasi" };
   if (path === "catalog") return { seeds: SEED_VARIETIES, products: PRODUCT_CATALOG, scenarios: WEATHER_SCENARIOS };
   if (path === "lahan" && body === undefined) return { lahan: readFarms() };
   if (path === "lahan/contoh") {
@@ -88,5 +76,5 @@ export async function requestDemo(path: string, body?: string): Promise<unknown>
     if (!result.result) throw Object.assign(new Error("Periksa kembali isian perhitungan."), { fields: result.errors });
     return result.result;
   }
-  throw new Error("Fitur ini belum tersedia pada versi demo.");
+  throw new Error("Fitur ini belum tersedia.");
 }

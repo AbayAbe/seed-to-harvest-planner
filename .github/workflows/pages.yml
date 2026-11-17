@@ -1,4 +1,4 @@
-name: Deploy demo ke GitHub Pages
+name: Deploy website ke GitHub Pages
 
 on:
   push:
