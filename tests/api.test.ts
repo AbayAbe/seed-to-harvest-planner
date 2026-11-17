@@ -30,7 +30,7 @@ test("independent backend serves health and the complete catalog", async () => {
   const response = await fetch(`${base}/api/catalog`);
   const catalog: CatalogResponse = await response.json();
   assert.equal(catalog.seeds.length, 8);
-  assert.equal(catalog.products.length, 4);
+  assert.equal(catalog.products.length, 22);
   assert.equal(catalog.scenarios.length, 4);
   assert.equal(catalog.products.find((item) => item.id === "nativo")?.unit, "g");
   assert.equal(response.headers.get("cache-control"), "no-store");

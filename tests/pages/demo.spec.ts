@@ -277,6 +277,57 @@ test("menus share one dashboard and preserve unfinished forms", async ({ page })
   await expect(page.locator(".farm-card")).toHaveCount(3);
 });
 
+test("Bayer library filters provenance and transfers identity without guessing rates or prices", async ({page})=>{
+  await page.goto(base);
+  const nav=page.getByRole("navigation",{name:"Menu utama"});
+  await nav.getByRole("button",{name:"Panduan Bayer",exact:true}).click();
+  const library=page.locator("#panduan-panel");
+  await expect(library.getByText("29 produk ditemukan",{exact:true})).toBeVisible();
+  await library.getByRole("combobox",{name:"Status referensi",exact:true}).selectOption("current");
+  await expect(library.getByText("8 produk ditemukan",{exact:true})).toBeVisible();
+  await library.getByRole("button",{name:"Atur ulang pencarian"}).click();
+  await library.getByRole("searchbox").fill("adengo");
+  const card=library.getByRole("article",{name:"Adengo 315 SC",exact:true});
+  await expect(card.getByText("Referensi arsip",{exact:true})).toBeVisible();
+  await card.locator("summary").click();
+  await card.getByRole("button",{name:"Buka kalkulator",exact:true}).click();
+  await expect(page.getByLabel("Produk Bayer",{exact:true})).toHaveValue("adengo");
+  await expect(page.getByLabel("Dosis produk (ml/ha)",{exact:true})).toHaveValue("");
+  await expect(page.getByLabel("Air per hektare (liter/ha)",{exact:true})).toHaveValue("");
+  await page.getByRole("button",{name:"Lihat rincian Adengo 315 SC",exact:true}).click();
+  await library.getByRole("region",{name:"Produk yang dipilih"}).getByRole("button",{name:"Catat harga beli",exact:true}).click();
+  await expect(page.getByLabel("Nama produk harga",{exact:true})).toHaveValue("Adengo 315 SC");
+  await expect(page.getByRole("combobox",{name:"Satuan produk",exact:true})).toHaveValue("ml");
+  await expect(page.getByLabel("Harga kemasan (Rp)",{exact:true})).toHaveValue("");
+  await nav.getByRole("button",{name:"Panduan Bayer",exact:true}).click();
+  await library.getByRole("button",{name:"Atur ulang pencarian"}).click();
+  await library.getByRole("searchbox").fill("tidak-ada-produk");
+  await expect(library.getByRole("heading",{name:"Belum ada hasil yang cocok."})).toBeVisible();
+  await library.getByRole("button",{name:"Tampilkan semua produk",exact:true}).click();
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBeTruthy();
+  await page.screenshot({path:"output/ui-review/bayer-mobile.png",fullPage:true});
+  await page.setViewportSize({width:1440,height:1000});
+  await page.screenshot({path:"output/ui-review/bayer-desktop.png",fullPage:true});
+});
+
+test("Bayer crop references are reading aids and retain explicit application methods",async({page})=>{
+  await page.goto(base+"#klinik");
+  const clinic=page.locator("#klinik-panel");
+  await clinic.getByRole("combobox",{name:"Jenis tanaman",exact:true}).selectOption("Jagung");
+  const reference=clinic.getByRole("region",{name:"Referensi Bayer untuk Jagung"});
+  await reference.getByRole("textbox").fill("FAW");
+  await expect(reference).toContainText("Vayego 200 SC");
+  await expect(reference).toContainText("tidak memastikan penyakit");
+  await expect(reference).not.toContainText("Tuang");
+  await page.getByRole("navigation",{name:"Menu utama"}).getByRole("button",{name:"Panduan Bayer",exact:true}).click();
+  const library=page.locator("#panduan-panel");
+  await library.getByRole("searchbox").fill("immune start");
+  const product=library.getByRole("article",{name:"Immune Start 200/80 FS",exact:true});
+  await product.locator("summary").click();
+  await expect(product).toContainText("5 ml/kg benih");
+  await expect(product.getByRole("button",{name:"Buka kalkulator"})).toHaveCount(0);
+});
+
 test("sidebar stays reachable on short screens and retains large touch targets",async({page})=>{
   await page.setViewportSize({width:1366,height:768});await page.goto(base);
   await expect(page.getByRole("button",{name:"Coba dengan 3 lahan contoh"})).toBeVisible();
@@ -286,7 +337,7 @@ test("sidebar stays reachable on short screens and retains large touch targets",
     const footer=page.getByRole("link",{name:/Panduan produk/});
     const footerBox=await footer.boundingBox();expect(footerBox!.y).toBeGreaterThanOrEqual(0);expect(footerBox!.y+footerBox!.height).toBeLessThanOrEqual(height);
     await page.getByRole("button",{name:/Lahan saya/}).focus();
-    const last=page.getByRole("button",{name:/Riwayat penyakit/});await last.focus();
+    const last=page.getByRole("button",{name:"Panduan Bayer",exact:true});await last.focus();
     const bounds=await last.boundingBox();const scroll=await page.locator('.sidebar-scroll').boundingBox();
     expect(bounds!.y).toBeGreaterThanOrEqual(scroll!.y-1);expect(bounds!.y+bounds!.height).toBeLessThanOrEqual(scroll!.y+scroll!.height+1);
     expect(bounds!.height).toBeGreaterThanOrEqual(64);

@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { ArrowLeft, ArrowUpRight, CalendarDays, FlaskConical, Leaf, LogOut, MapPinned, Sprout, Wallet, History, Stethoscope } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, CalendarDays, FlaskConical, Leaf, LogOut, MapPinned, Sprout, Wallet, History, Stethoscope, BookOpen } from "lucide-react";
 import KalkulatorDosis from "./tank-mix-calculator";
 import PlannerTimeline from "./planner-timeline";
 import type { CatalogResponse, Lahan, Pengguna, SesiJuragan } from "@agri/contracts";
@@ -11,10 +11,11 @@ import LoginNomorHp from "./juragan/login-nomor-hp";
 import DashboardJuragan from "./juragan/dashboard-juragan";
 import DashboardProfesional from "./juragan/dashboard-profesional";
 
+import BayerLibrary from "./bayer-library";
 import KlinikDashboard from "./klinik-dashboard";
 import FinanceDashboard from "./records/finance-dashboard";
 import DiseaseDashboard from "./records/disease-dashboard";
-import { DashboardNavigation, type DashboardView } from "./dashboard-navigation";
+import { DashboardNavigation, type DashboardView, type ProductSelection } from "./dashboard-navigation";
 
 export default function Dashboard({ initialView = "lahan" }: { initialView?: DashboardView } = {}) {
   const sesi = useApiQuery<SesiJuragan>("auth/session");
@@ -30,6 +31,7 @@ export default function Dashboard({ initialView = "lahan" }: { initialView?: Das
 }
 
 function RuangJuragan({ pengguna, onKeluar, initialView }: { pengguna: Pengguna; onKeluar: () => void; initialView: DashboardView }) {
+  const [selection,setSelection] = useState<ProductSelection|null>(null);
   const [view, setView] = useState<DashboardView>(initialView);
   const [visited, setVisited] = useState<DashboardView[]>([initialView]);
   const navigate = useCallback((next: DashboardView) => {
@@ -38,19 +40,24 @@ function RuangJuragan({ pengguna, onKeluar, initialView }: { pengguna: Pengguna;
   }, []);
   useEffect(() => {
     const next = window.location.hash.slice(1);
-    if (["lahan", "timeline", "tank-mix", "klinik", "keuangan", "riwayat"].includes(next)) navigate(next as DashboardView);
+    if (["lahan", "timeline", "tank-mix", "klinik", "keuangan", "riwayat", "panduan"].includes(next)) navigate(next as DashboardView);
   }, [navigate]);
+  const chooseProduct = useCallback((productId: string, next: DashboardView) => {
+    setSelection(previous => ({productId,view:next,token:(previous?.token??0)+1}));
+    navigate(next);
+  },[navigate]);
   const [lahanAktif, setLahanAktif] = useState<Lahan | null>(null);
   const [keluarSibuk, setKeluarSibuk] = useState(false);
   const [galatKeluar, setGalatKeluar] = useState("");
   const catalog = useApiQuery<CatalogResponse>("catalog");
-  const navigation = [
+  const navigation: { id: DashboardView; label: string; detail: string; Icon: typeof BookOpen }[] = [
     { id: "lahan" as const, label: "Lahan saya", detail: "Pantau semua lokasi", Icon: MapPinned },
     { id: "timeline" as const, label: "Jadwal tanam", detail: "Atur langkah budidaya", Icon: CalendarDays },
     { id: "tank-mix" as const, label: "Kalkulator dosis", detail: "Hitung kebutuhan tangki", Icon: FlaskConical },
     { id: "klinik" as const, label: "Klinik tanaman", detail: "Kenali gejala dari foto", Icon: Stethoscope },
     { id: "keuangan" as const, label: "Buku kas tani", detail: "Biaya, pendapatan, ROI", Icon: Wallet },
     { id: "riwayat" as const, label: "Riwayat penyakit", detail: "Pantau pola per lahan", Icon: History },
+    { id: "panduan", label: "Panduan Bayer", detail: "Produk, tanaman, referensi", Icon: BookOpen },
   ];
   const judul = navigation.find(item => item.id === view)!.label;
   const plannerView = view === "timeline" || view === "tank-mix";
@@ -63,7 +70,7 @@ function RuangJuragan({ pengguna, onKeluar, initialView }: { pengguna: Pengguna;
   function bukaLahan(lahan: Lahan) { setLahanAktif(lahan); navigate("timeline"); window.scrollTo({ top: 0 }); }
 
   return (
-    <DashboardNavigation.Provider value={{view,navigate}}><div className="app-shell">
+    <DashboardNavigation.Provider value={{view,navigate,selection,chooseProduct}}><div className="app-shell">
       <a className="skip-link" href="#main-content">Langsung ke isi</a>
       <aside className="sidebar" aria-label="Navigasi Cyphera">
         <div className="brand"><span className="brand-mark"><Sprout size={25} /></span><div><strong>Cyphera<span className="brand-dot">.</span></strong><span>Perencana tani</span></div></div>
@@ -73,11 +80,11 @@ function RuangJuragan({ pengguna, onKeluar, initialView }: { pengguna: Pengguna;
           {navigation.map(({ id, label, detail, Icon }) => <button type="button" key={id} onClick={() => navigate(id)} aria-label={label} aria-pressed={view === id} aria-controls={`${id}-panel`} className={`nav-item ${view === id ? "is-active" : ""}`}><Icon size={22} /><span><strong>{label}</strong><small>{detail}</small></span><span className="nav-indicator" /></button>)}
         </nav>
         </div>
-        <div className="sidebar-bottom"><a className="sidebar-reference" href="https://www.bayer.com/id/id/produk/indonesia-crop-protection" target="_blank" rel="noreferrer"><span className="sidebar-reference-icon"><Leaf size={20}/></span><span><strong>Panduan produk</strong><small>Referensi resmi Bayer</small></span><ArrowUpRight size={18}/><span className="sr-only"> (buka tab baru)</span></a><p className="sidebar-foot">Cyphera / Ruang kerja pertanian</p></div>
+        <div className="sidebar-bottom"><a className="sidebar-reference" href="https://www.bayer.com/id-id/indonesia/divisi/crop-science/crop-protection" target="_blank" rel="noreferrer"><span className="sidebar-reference-icon"><Leaf size={20}/></span><span><strong>Panduan produk</strong><small>Referensi resmi Bayer</small></span><ArrowUpRight size={18}/><span className="sr-only"> (buka tab baru)</span></a><p className="sidebar-foot">Cyphera / Ruang kerja pertanian</p></div>
       </aside>
 
       <div className="app-content">
-        <header className="topbar juragan-topbar"><p><span className="hidden sm:inline">Perencanaan <span className="mx-3 text-[#708078]">/</span></span><strong>{judul}</strong></p><div className="flex items-center gap-3"><span className="status-pill"><span /> {view === "tank-mix" ? "Dosis dari label" : view === "klinik" ? "Pengamatan tanaman" : view === "keuangan" ? "Buku kas" : view === "riwayat" ? "Riwayat pengamatan" : "Cuaca simulasi"}</span>{process.env.NEXT_PUBLIC_DEMO_STATIC !== "true" && <button type="button" className="logout-button" onClick={keluar} disabled={keluarSibuk}><LogOut size={20}/>{keluarSibuk ? "Tunggu…" : "Keluar"}</button>}</div></header>
+        <header className="topbar juragan-topbar"><p><span className="hidden sm:inline">Perencanaan <span className="mx-3 text-[#708078]">/</span></span><strong>{judul}</strong></p><div className="flex items-center gap-3"><span className="status-pill"><span /> {view === "tank-mix" ? "Dosis dari label" : view === "klinik" ? "Pengamatan tanaman" : view === "keuangan" ? "Buku kas" : view === "riwayat" ? "Riwayat pengamatan" : view === "panduan" ? "Referensi Bayer" : "Cuaca simulasi"}</span>{process.env.NEXT_PUBLIC_DEMO_STATIC !== "true" && <button type="button" className="logout-button" onClick={keluar} disabled={keluarSibuk}><LogOut size={20}/>{keluarSibuk ? "Tunggu…" : "Keluar"}</button>}</div></header>
         <main id="main-content" tabIndex={-1} className="workspace">
           {process.env.NEXT_PUBLIC_DEMO_STATIC === "true" && plannerView && <p className="rounded-xl bg-green-100 p-5 mb-5 text-slate-900"><strong>Penyimpanan di perangkat ini.</strong> Data lahan hanya tersimpan di perangkat ini. Cuaca adalah simulasi. Data hilang jika penyimpanan situs dihapus.</p>}
           {galatKeluar && <p role="alert" className="error-message mb-5">{galatKeluar}</p>}
@@ -93,6 +100,7 @@ function RuangJuragan({ pengguna, onKeluar, initialView }: { pengguna: Pengguna;
           <div id="klinik-panel" hidden={view !== "klinik"}>{visited.includes("klinik") && <KlinikDashboard/>}</div>
           <div id="keuangan-panel" hidden={view !== "keuangan"}>{visited.includes("keuangan") && <FinanceDashboard active={view === "keuangan"}/>}</div>
           <div id="riwayat-panel" hidden={view !== "riwayat"}>{visited.includes("riwayat") && <DiseaseDashboard active={view === "riwayat"}/>}</div>
+          <div id="panduan-panel" hidden={view !== "panduan"}>{visited.includes("panduan") && <BayerLibrary/>}</div>
           <footer className="workspace-footer"><span>Cyphera · Perencana tani</span><span>Rencanakan dengan jelas, gunakan sesuai label.</span></footer>
         </main>
       </div>

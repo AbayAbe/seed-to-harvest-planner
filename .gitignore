@@ -15,3 +15,5 @@ backend/data/
 *.sqlite
 *.sqlite-shm
 *.sqlite-wal
+
+output/research/

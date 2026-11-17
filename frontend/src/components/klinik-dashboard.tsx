@@ -3,11 +3,13 @@
 import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from "react";
 import { Camera, Upload, Leaf, ScanLine, ClipboardCheck, Check, ArrowUpRight, ImagePlus, NotebookPen } from "lucide-react";
 
+import { CropReference } from "./bayer-reference";
+import { BAYER_CROPS } from "../../../backend/src/lib/bayer/knowledge";
 import { DashboardLink } from "./dashboard-navigation";
 
 interface Observation { id: string; crop: string; location: string; note: string; date: string }
 const KEY = "cyphera:clinic:observations:v1";
-const crops = ["Tomat", "Padi", "Cabai", "Jagung", "Kentang", "Kedelai", "Bawang merah", "Tanaman lainnya"];
+const crops = [...BAYER_CROPS, "Tanaman lainnya"];
 const field = "min-h-[64px] w-full rounded-2xl border border-slate-300 bg-white px-4 text-base text-slate-900 focus:outline-2 focus:outline-offset-2 focus:outline-emerald-700";
 function readNotes(): Observation[] {
   const data: unknown = JSON.parse(localStorage.getItem(KEY) ?? "[]");
@@ -79,5 +81,6 @@ export default function KlinikDashboard() {
       <section className="rounded-3xl border border-emerald-200 bg-emerald-50 p-6 sm:p-8"><ScanLine size={28} className="text-emerald-800"/><h2 className="mt-4 text-2xl font-bold">Ruang hasil pemeriksaan</h2><p className="mt-3 text-sm leading-7 text-slate-700">Setelah layanan AI diaktifkan, hasil pengamatan foto akan tampil di sini. Untuk saat ini, simpan catatan dan konsultasikan gejala dengan penyuluh.</p><div className="mt-5 space-y-3">{["Identifikasi gejala", "Kemungkinan penyebab", "Tinjauan produk dan dosis"].map(label => <div key={label} className="flex items-center justify-between gap-3 rounded-xl border border-emerald-200 bg-white p-4 text-sm"><span className="font-semibold">{label}</span><span className="text-slate-700">Belum tersedia</span></div>)}</div><p className="mt-4 text-xs leading-6 text-slate-700">Tidak ada diagnosis atau dosis otomatis pada versi ini.</p></section></div>
     </div>
     <DashboardLink to="riwayat" className="mt-6 flex min-h-[64px] items-center justify-between rounded-2xl bg-emerald-900 px-6 font-semibold text-white">Buka riwayat penyakit per lahan <ArrowUpRight size={20}/></DashboardLink><section className="mt-7 rounded-3xl border border-slate-200 bg-white p-6 sm:p-8" aria-label="Riwayat pengamatan"><p className="text-xs font-bold tracking-widest text-emerald-800">03 / JEJAK PENGAMATAN</p><h2 className="mt-3 text-2xl font-bold">Catatan terakhir Anda</h2><p className="mt-2 text-sm leading-6 text-slate-700">Tersimpan di browser perangkat ini, terpisah dari cadangan lahan. Menghapus data situs akan menghapus catatan.</p>{notes.length ? <ul className="mt-6 grid gap-4 sm:grid-cols-2">{notes.slice(0, 10).map(n => <li key={n.id} className="min-w-0 rounded-2xl border border-slate-200 p-5"><div className="flex flex-wrap items-center justify-between gap-2"><strong className="text-emerald-900">{n.crop}</strong><time className="text-xs text-slate-700" dateTime={n.date}>{new Date(n.date).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" })}</time></div>{n.location && <p className="mt-2 break-words text-sm font-semibold">{n.location}</p>}<p className="mt-3 whitespace-pre-wrap break-words text-sm leading-7 text-slate-700">{n.note}</p></li>)}</ul>: <div className="mt-6 rounded-2xl bg-slate-50 p-6 text-center"><NotebookPen size={28} className="mx-auto text-emerald-800"/><p className="mt-3 font-semibold">Belum ada catatan.</p><p className="mt-2 text-sm text-slate-700">Pengamatan kecil hari ini membantu pemeriksaan berikutnya.</p></div>}{notes.length > 10 && <p className="mt-4 text-sm text-slate-700">Menampilkan 10 catatan terbaru dari {notes.length} catatan.</p>}</section>
+    <CropReference key={crop} crop={crop}/>
   </div>;
 }

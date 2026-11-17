@@ -15,7 +15,7 @@ export interface WeatherScenario {
 export interface ProductCatalogItem {
   readonly id: string;
   readonly name: string;
-  readonly category: "Fungisida" | "Insektisida";
+  readonly category: "Fungisida" | "Insektisida" | "Herbisida";
   readonly unit: DoseUnit;
   readonly source: string;
 }

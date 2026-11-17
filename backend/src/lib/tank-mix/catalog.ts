@@ -1,7 +1,7 @@
-/** Names and classifications from Bayer Indonesia. Verify current local labels. */
-export const PRODUCT_CATALOG = [
-  { id: "nativo", name: "Nativo 75 WG", category: "Fungisida", unit: "g", source: "https://www.bayer.com/id/id/nativo" },
-  { id: "antracol", name: "Antracol 70 WP", category: "Fungisida", unit: "g", source: "https://www.bayer.com/en/id/antracol" },
-  { id: "vayego", name: "Vayego 200 SC", category: "Insektisida", unit: "ml", source: "https://www.bayer.com/id-id/indonesia/divisi/crop-science/vayego" },
-  { id: "decis", name: "Decis 25 EC", category: "Insektisida", unit: "ml", source: "https://www.bayer.com/id/id/decis" },
-] as const;
+import type { ProductCatalogItem } from "@agri/contracts";
+import { BAYER_PRODUCTS, BAYER_CONTACT_URL } from "../bayer/knowledge.js";
+
+/** Identification only. The user must supply rates from their current local label. */
+export const PRODUCT_CATALOG: readonly ProductCatalogItem[] = BAYER_PRODUCTS
+  .filter(p => p.sprayCalculator && p.unit && ["Fungisida","Insektisida","Herbisida"].includes(p.category))
+  .map(p => ({id:p.id,name:p.name,category:p.category as ProductCatalogItem["category"],unit:p.unit!,source:p.currentSource??BAYER_CONTACT_URL}));

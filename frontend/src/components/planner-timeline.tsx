@@ -1,5 +1,6 @@
 "use client";
 
+import { CropReference } from "./bayer-reference";
 import { useState } from "react";
 import { differenceInCalendarDays, format, parseISO } from "date-fns";
 import { id } from "date-fns/locale";
@@ -73,6 +74,7 @@ export default function PlannerTimeline({ catalog, lahan = null, onOpenCalculato
         <div className="schedule-footer"><ArrowDown size={17}/><p>Jadwal dan pasangan produk–tanaman masih contoh. Cocokkan dengan label dan arahan petugas pertanian.</p></div>
       </section>
     </div>
+    {seed && <CropReference key={seed.crop} crop={seed.crop}/>}
   </>;
 }
 

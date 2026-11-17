@@ -1,0 +1,1287 @@
+[
+  {
+    "id": "nativo",
+    "name": "Nativo 75 WG",
+    "category": "Fungisida",
+    "unit": "g",
+    "ingredients": "Trifloksistrobin 25%; tebukonazol 50%",
+    "formulation": "WG",
+    "registration": "01020120072781",
+    "packs": [
+      12.5,
+      50.0
+    ],
+    "crops": [
+      "Padi",
+      "Jagung",
+      "Cabai",
+      "Bawang merah",
+      "Tomat",
+      "Kedelai",
+      "Kopi",
+      "Kakao",
+      "Mangga",
+      "Melon",
+      "Mentimun",
+      "Semangka",
+      "Pisang",
+      "Teh"
+    ],
+    "summary": "Fungisida sistemik untuk beberapa penyakit tanaman; dosis bergantung pada tanaman dan sasaran.",
+    "notes": "Dosis berbeda menurut tanaman dan sasaran; satu takaran tidak berlaku untuk semua penggunaan.",
+    "source": "https://www.bayer.com/id/id/nativo",
+    "uses": [
+      {
+        "crop": "Cabai",
+        "target": "Antraknosa; bercak daun",
+        "dose": "100-150 g/ha",
+        "method": "Semprot volume tinggi saat gejala ditemukan."
+      },
+      {
+        "crop": "Jagung",
+        "target": "Bulai (Peronosclerospora maydis)",
+        "dose": "0,4-0,8 g/l",
+        "method": "Semprot volume tinggi saat gejala ditemukan."
+      },
+      {
+        "crop": "Jagung",
+        "target": "Bercak daun (Helminthosporium turcicum)",
+        "dose": "0,8-1,2 g/l",
+        "method": "Semprot volume tinggi saat gejala ditemukan."
+      },
+      {
+        "crop": "Tomat",
+        "target": "Busuk kering; bercak daun",
+        "dose": "100-150 g/ha",
+        "method": "Semprot volume tinggi saat gejala ditemukan."
+      },
+      {
+        "crop": "Kedelai",
+        "target": "Karat (Phakopsora pachyrhizi)",
+        "dose": "100-150 g/ha",
+        "method": "Semprot volume tinggi saat gejala ditemukan."
+      },
+      {
+        "crop": "Kopi",
+        "target": "Karat daun; bercak daun",
+        "dose": "1 g/l",
+        "method": "Semprot volume tinggi saat gejala ditemukan."
+      },
+      {
+        "crop": "Pisang",
+        "target": "Sigatoka",
+        "dose": "200 g/ha",
+        "method": "Semprot volume tinggi saat gejala ditemukan."
+      }
+    ],
+    "sprayCalculator": true,
+    "sourceStatus": "current-page",
+    "currentSource": "https://www.bayer.com/id-id/indonesia/divisi/crop-science/nativo"
+  },
+  {
+    "id": "antracol",
+    "name": "Antracol 70 WP",
+    "category": "Fungisida",
+    "unit": "g",
+    "ingredients": "Propineb 70%",
+    "formulation": "WP",
+    "registration": "010201197474",
+    "packs": [
+      250.0,
+      500.0,
+      1000.0
+    ],
+    "crops": [
+      "Padi",
+      "Jagung",
+      "Cabai",
+      "Bawang merah",
+      "Bawang putih",
+      "Kentang",
+      "Tomat",
+      "Kedelai",
+      "Kopi",
+      "Teh",
+      "Kubis",
+      "Mangga",
+      "Semangka",
+      "Stroberi"
+    ],
+    "summary": "Fungisida kontak protektif dengan bahan aktif propineb.",
+    "notes": "Periksa jenis penyakit dan interval pada label kemasan.",
+    "source": "https://www.bayer.com/id/id/antracol",
+    "uses": [
+      {
+        "crop": "Bawang merah",
+        "target": "Bercak ungu",
+        "dose": "2 g/l; air 300-800 l/ha",
+        "method": "Saat gejala muncul; interval 5-7 hari menurut tingkat serangan."
+      },
+      {
+        "crop": "Cabai",
+        "target": "Antraknosa",
+        "dose": "1-2 g/l; air 500-1000 l/ha",
+        "method": "Saat gejala muncul; interval 7 hari."
+      },
+      {
+        "crop": "Jagung",
+        "target": "Bulai; hawar daun",
+        "dose": "2 kg/ha; air 500-800 l/ha",
+        "method": "Saat gejala muncul; interval 7 hari."
+      },
+      {
+        "crop": "Kentang",
+        "target": "Busuk daun",
+        "dose": "1,5-2,5 g/l; air 400-800 l/ha",
+        "method": "Berdasarkan bercak aktif; interval 5-7 hari. Periksa ambang pada label."
+      },
+      {
+        "crop": "Kedelai",
+        "target": "Karat",
+        "dose": "1-1,5 kg/ha",
+        "method": "Semprot volume tinggi saat gejala muncul."
+      },
+      {
+        "crop": "Tomat",
+        "target": "Busuk daun",
+        "dose": "1,5-2,5 kg/ha",
+        "method": "Berdasarkan bercak aktif; interval 5-7 hari. Periksa ambang pada label."
+      }
+    ],
+    "sprayCalculator": true,
+    "sourceStatus": "current-page",
+    "currentSource": "https://www.bayer.com/id-id/indonesia/divisi/crop-science/antracol"
+  },
+  {
+    "id": "vayego",
+    "name": "Vayego 200 SC",
+    "category": "Insektisida",
+    "unit": "ml",
+    "ingredients": "Tetraniliprol 200 g/l",
+    "formulation": "SC",
+    "registration": "01010120196589",
+    "packs": [
+      50.0,
+      100.0
+    ],
+    "crops": [
+      "Bawang merah",
+      "Cabai",
+      "Jagung",
+      "Kelapa sawit",
+      "Kubis"
+    ],
+    "summary": "Insektisida sistemik untuk hama ulat dan pengorok daun tertentu.",
+    "notes": "Aplikasi berdasarkan temuan hama; bukan otomatis setiap umur tanaman.",
+    "source": "https://www.bayer.com/id/id/vayego",
+    "uses": [
+      {
+        "crop": "Cabai",
+        "target": "Penggerek buah (Helicoverpa armigera)",
+        "dose": "0,5 ml/l",
+        "method": "Semprot volume tinggi saat hama ditemukan."
+      },
+      {
+        "crop": "Bawang merah",
+        "target": "Pengorok daun (Liriomyza huidobrensis)",
+        "dose": "0,5 ml/l",
+        "method": "Semprot volume tinggi saat hama ditemukan."
+      },
+      {
+        "crop": "Jagung",
+        "target": "Ulat grayak FAW (Spodoptera frugiperda); ulat grayak; penggerek batang",
+        "dose": "0,75 ml/l",
+        "method": "Semprot volume tinggi saat hama ditemukan."
+      },
+      {
+        "crop": "Kelapa sawit",
+        "target": "Ulat kantong (Metisa plana)",
+        "dose": "0,75 ml/l",
+        "method": "Semprot volume tinggi saat hama ditemukan."
+      },
+      {
+        "crop": "Kubis",
+        "target": "Ulat perusak daun (Plutella xylostella)",
+        "dose": "1 ml/l",
+        "method": "Semprot volume tinggi saat hama ditemukan."
+      }
+    ],
+    "sprayCalculator": true,
+    "sourceStatus": "current-page",
+    "currentSource": "https://www.bayer.com/id-id/indonesia/divisi/crop-science/vayego"
+  },
+  {
+    "id": "decis",
+    "name": "Decis 25 EC",
+    "category": "Insektisida",
+    "unit": "ml",
+    "ingredients": "Deltametrin 25 g/l",
+    "formulation": "EC",
+    "registration": "0101011979387",
+    "packs": [
+      50.0,
+      100.0,
+      250.0,
+      500.0,
+      5000.0
+    ],
+    "crops": [
+      "Anggrek",
+      "Apel",
+      "Bawang merah",
+      "Belimbing",
+      "Cabai",
+      "Jagung",
+      "Jeruk",
+      "Kedelai",
+      "Kelapa sawit",
+      "Kentang",
+      "Mentimun",
+      "Kopi",
+      "Kubis",
+      "Mangga",
+      "Melon",
+      "Semangka",
+      "Teh",
+      "Tembakau",
+      "Tomat"
+    ],
+    "summary": "Insektisida kontak dan lambung.",
+    "notes": "Penggunaan pada benih berbeda dengan penyemprotan daun.",
+    "source": "https://www.bayer.com/id/id/decis",
+    "uses": [
+      {
+        "crop": "Bawang merah",
+        "target": "Ulat grayak (Spodoptera exigua)",
+        "dose": "1 ml/l",
+        "method": "Penyemprotan; periksa interval pada label."
+      },
+      {
+        "crop": "Cabai",
+        "target": "Thrips",
+        "dose": "1 ml/l",
+        "method": "Penyemprotan; periksa interval pada label."
+      },
+      {
+        "crop": "Cabai",
+        "target": "Kutu daun",
+        "dose": "0,5 ml/l",
+        "method": "Penyemprotan; periksa interval pada label."
+      },
+      {
+        "crop": "Cabai",
+        "target": "Ulat grayak",
+        "dose": "0,25 ml/l",
+        "method": "Penyemprotan; periksa interval pada label."
+      },
+      {
+        "crop": "Jagung",
+        "target": "Penggerek batang; penggerek tongkol",
+        "dose": "1-1,5 ml/l",
+        "method": "Penyemprotan; periksa interval pada label."
+      }
+    ],
+    "sprayCalculator": true,
+    "sourceStatus": "current-page",
+    "currentSource": "https://www.bayer.com/id-id/indonesia/divisi/crop-science/decis"
+  },
+  {
+    "id": "baycarb",
+    "name": "Baycarb 500 EC",
+    "category": "Insektisida",
+    "unit": "ml",
+    "ingredients": "Fenobukarb (BPMC) 500 g/l",
+    "formulation": "EC",
+    "registration": "0101011978324",
+    "packs": [
+      100.0,
+      500.0
+    ],
+    "crops": [
+      "Jagung",
+      "Kakao",
+      "Padi",
+      "Teh"
+    ],
+    "summary": "Insektisida kontak dan lambung; antara lain untuk wereng pada padi.",
+    "notes": "Formulasi dan kadar harus sama dengan kemasan yang digunakan.",
+    "source": "https://www.bayer.com/id/id/baycarb",
+    "uses": [
+      {
+        "crop": "Padi",
+        "target": "Wereng coklat",
+        "dose": "1 l/ha",
+        "method": "Penyemprotan volume tinggi; cocokkan label terbaru."
+      },
+      {
+        "crop": "Jagung",
+        "target": "Belalang (Locusta migratoria)",
+        "dose": "2 l/ha",
+        "method": "Penyemprotan volume tinggi."
+      }
+    ],
+    "sprayCalculator": true,
+    "sourceStatus": "archive",
+    "currentSource": null
+  },
+  {
+    "id": "belt-expert",
+    "name": "Belt Expert 480 SC",
+    "category": "Insektisida",
+    "unit": "ml",
+    "ingredients": "Flubendiamida 240 g/l; tiakloprid 240 g/l",
+    "formulation": "SC",
+    "registration": "01010120144893",
+    "packs": [
+      50.0,
+      100.0,
+      250.0
+    ],
+    "crops": [
+      "Padi",
+      "Jagung"
+    ],
+    "summary": "Insektisida untuk hama tertentu pada padi dan jagung.",
+    "notes": "Sasaran berbeda dapat memiliki dosis berbeda.",
+    "source": "https://www.bayer.com/id/id/belt-expert",
+    "uses": [
+      {
+        "crop": "Padi",
+        "target": "Penggerek batang",
+        "dose": "300 ml/ha",
+        "method": "Penyemprotan volume tinggi."
+      },
+      {
+        "crop": "Padi",
+        "target": "Penggulung daun",
+        "dose": "200 ml/ha",
+        "method": "Penyemprotan volume tinggi."
+      },
+      {
+        "crop": "Jagung",
+        "target": "Ulat grayak FAW (Spodoptera frugiperda)",
+        "dose": "1 ml/l",
+        "method": "Penyemprotan volume tinggi."
+      }
+    ],
+    "sprayCalculator": true,
+    "sourceStatus": "archive",
+    "currentSource": null
+  },
+  {
+    "id": "buldok",
+    "name": "Buldok 25 EC",
+    "category": "Insektisida",
+    "unit": "ml",
+    "ingredients": "Beta siflutrin 25 g/l",
+    "formulation": "EC",
+    "registration": "0101011990933",
+    "packs": [
+      100.0,
+      250.0,
+      500.0
+    ],
+    "crops": [
+      "Anggrek",
+      "Anggur",
+      "Apel",
+      "Bawang merah",
+      "Bawang putih",
+      "Cabai",
+      "Jagung",
+      "Kakao",
+      "Kedelai",
+      "Kentang",
+      "Kelapa sawit",
+      "Kopi",
+      "Kubis",
+      "Mangga",
+      "Melon",
+      "Semangka",
+      "Teh",
+      "Tembakau",
+      "Tomat"
+    ],
+    "summary": "Insektisida kontak dan lambung untuk berbagai hama.",
+    "notes": "Jangan menyamakan takaran antarjenis hama.",
+    "source": "https://www.bayer.com/id/id/buldok",
+    "uses": [
+      {
+        "crop": "Bawang merah",
+        "target": "Ulat grayak",
+        "dose": "7,5-15 ml/10 l",
+        "method": "Penyemprotan; satuan sumber per 10 liter."
+      },
+      {
+        "crop": "Kelapa sawit",
+        "target": "Ulat api",
+        "dose": "0,75-1,5 ml/l",
+        "method": "Penyemprotan; ikuti label terbaru."
+      },
+      {
+        "crop": "Kopi",
+        "target": "Penggerek buah",
+        "dose": "0,5-1 ml/l",
+        "method": "Penyemprotan; ikuti label terbaru."
+      }
+    ],
+    "sprayCalculator": true,
+    "sourceStatus": "archive",
+    "currentSource": null
+  },
+  {
+    "id": "confidor-extra",
+    "name": "Confidor Extra 350 SC",
+    "category": "Insektisida",
+    "unit": "ml",
+    "ingredients": "Imidakloprid 350 g/l",
+    "formulation": "SC",
+    "registration": "01010120144974",
+    "packs": [
+      50.0,
+      100.0
+    ],
+    "crops": [
+      "Apel",
+      "Cabai",
+      "Jagung",
+      "Jeruk",
+      "Kacang panjang",
+      "Kentang",
+      "Mangga",
+      "Mentimun",
+      "Padi",
+      "Semangka",
+      "Teh",
+      "Tembakau",
+      "Tomat"
+    ],
+    "summary": "Insektisida sistemik; mencakup wereng dan beberapa hama pengisap.",
+    "notes": "Berbeda kadar dan formulasi dari Confidor 200 SL.",
+    "source": "https://www.bayer.com/id/id/confidor-extra",
+    "uses": [
+      {
+        "crop": "Padi",
+        "target": "Wereng coklat; wereng punggung putih",
+        "dose": "150-200 ml/ha",
+        "method": "Penyemprotan volume tinggi."
+      },
+      {
+        "crop": "Cabai",
+        "target": "Kutu daun; thrips",
+        "dose": "0,75 ml/l",
+        "method": "Penyemprotan volume tinggi."
+      }
+    ],
+    "sprayCalculator": true,
+    "sourceStatus": "archive",
+    "currentSource": null
+  },
+  {
+    "id": "confidor",
+    "name": "Confidor 200 SL",
+    "category": "Insektisida",
+    "unit": "ml",
+    "ingredients": "Imidakloprid 200 g/l",
+    "formulation": "SL",
+    "registration": "01010119921007",
+    "packs": [
+      60.0,
+      5000.0
+    ],
+    "crops": [
+      "Apel",
+      "Cabai",
+      "Jagung",
+      "Jeruk",
+      "Kacang panjang",
+      "Kapas",
+      "Kelapa sawit",
+      "Kentang",
+      "Mentimun",
+      "Mangga",
+      "Padi",
+      "Semangka",
+      "Teh",
+      "Tembakau",
+      "Tomat"
+    ],
+    "summary": "Insektisida sistemik dengan formulasi larut dalam air.",
+    "notes": "Tidak dapat ditukar takarannya dengan Confidor Extra.",
+    "source": "https://www.bayer.com/en/id/confidor",
+    "uses": [
+      {
+        "crop": "Cabai",
+        "target": "Kutu daun; thrips",
+        "dose": "0,25-0,5 ml/l; air 500-750 l/ha",
+        "method": "Penyemprotan volume tinggi."
+      }
+    ],
+    "sprayCalculator": true,
+    "sourceStatus": "archive",
+    "currentSource": null
+  },
+  {
+    "id": "movento",
+    "name": "Movento Energy 240 SC",
+    "category": "Insektisida",
+    "unit": "ml",
+    "ingredients": "Imidakloprid 120 g/l; spirotetramat 120 g/l",
+    "formulation": "SC",
+    "registration": "01010120113981",
+    "packs": [
+      50.0,
+      100.0
+    ],
+    "crops": [
+      "Apel",
+      "Bawang merah",
+      "Cabai",
+      "Jagung",
+      "Jambu biji",
+      "Jeruk",
+      "Kentang",
+      "Kopi",
+      "Kubis",
+      "Mangga",
+      "Melon",
+      "Rambutan",
+      "Semangka",
+      "Tembakau",
+      "Tomat"
+    ],
+    "summary": "Insektisida sistemik dengan dua bahan aktif untuk hama tertentu.",
+    "notes": "Halaman Bayer menyatakan tidak untuk tanaman padi.",
+    "source": "https://www.bayer.com/id/id/movento",
+    "uses": [
+      {
+        "crop": "Cabai",
+        "target": "Kutu daun; thrips; kutu kebul",
+        "dose": "0,5-1 l/ha",
+        "method": "Penyemprotan volume tinggi. Tidak untuk padi."
+      },
+      {
+        "crop": "Tomat",
+        "target": "Kutu kebul; thrips",
+        "dose": "1-2 ml/l",
+        "method": "Penyemprotan volume tinggi."
+      }
+    ],
+    "sprayCalculator": true,
+    "sourceStatus": "archive",
+    "currentSource": null
+  },
+  {
+    "id": "valacor",
+    "name": "Valacor 35 WG",
+    "category": "Insektisida",
+    "unit": "g",
+    "ingredients": "Klorantraniliprol 35% (halaman Indonesia)",
+    "formulation": "WG",
+    "registration": "01010120103605",
+    "packs": [
+      100.0
+    ],
+    "crops": [
+      "Cabai",
+      "Kubis",
+      "Padi",
+      "Bawang merah",
+      "Tomat"
+    ],
+    "summary": "Insektisida butiran untuk hama ulat dan penggerek tertentu.",
+    "notes": "Halaman Inggris menulis 34%, Indonesia 35%; cocokkan kadar pada label. Batas aplikasi berbeda menurut tanaman.",
+    "source": "https://www.bayer.com/id/id/valacor",
+    "uses": [
+      {
+        "crop": "Cabai",
+        "target": "Ulat buah (Helicoverpa armigera)",
+        "dose": "200 g/ha; air 600 l/ha",
+        "method": "Setelah gejala awal/ambang ekonomi; interval 7 hari, maksimal 3 aplikasi/musim, terakhir 14 hari sebelum panen."
+      },
+      {
+        "crop": "Padi",
+        "target": "Penggerek batang padi kuning",
+        "dose": "100 g/ha; air 300-400 l/ha",
+        "method": "Setelah gejala awal/ambang ekonomi; interval 7 hari, maksimal 2 aplikasi/musim."
+      },
+      {
+        "crop": "Bawang merah",
+        "target": "Ulat grayak",
+        "dose": "300 g/ha; air 600 l/ha",
+        "method": "Setelah gejala awal/ambang ekonomi; interval 7 hari, maksimal 3 aplikasi/musim."
+      }
+    ],
+    "sprayCalculator": true,
+    "sourceStatus": "archive",
+    "currentSource": null
+  },
+  {
+    "id": "folicur",
+    "name": "Folicur 25 WP",
+    "category": "Fungisida",
+    "unit": "g",
+    "ingredients": "Tebukonazol 25%",
+    "formulation": "WP",
+    "registration": "01020119931121",
+    "packs": [
+      50.0,
+      250.0
+    ],
+    "crops": [
+      "Apel",
+      "Bawang merah",
+      "Bawang putih",
+      "Cabai",
+      "Kentang",
+      "Padi",
+      "Teh",
+      "Tomat"
+    ],
+    "summary": "Fungisida sistemik berbentuk tepung.",
+    "notes": "Tidak sama takarannya dengan Folicur 430 SC.",
+    "source": "https://www.bayer.com/id/id/folicur",
+    "uses": [
+      {
+        "crop": "Cabai",
+        "target": "Antraknosa",
+        "dose": "1-2 g/l; air 400-600 l/ha",
+        "method": "Saat gejala ditemukan; interval 1 minggu."
+      },
+      {
+        "crop": "Bawang merah",
+        "target": "Bercak ungu",
+        "dose": "0,15-0,3 g/l; air 500-1000 l/ha",
+        "method": "Saat gejala ditemukan; interval 4 hari."
+      },
+      {
+        "crop": "Tomat",
+        "target": "Bercak kering",
+        "dose": "0,5-1 g/l; air 400-600 l/ha",
+        "method": "Saat gejala ditemukan; interval 1 minggu."
+      }
+    ],
+    "sprayCalculator": true,
+    "sourceStatus": "archive",
+    "currentSource": null
+  },
+  {
+    "id": "folicur-gold",
+    "name": "Folicur Gold / Folicur 430 SC",
+    "category": "Fungisida",
+    "unit": "ml",
+    "ingredients": "Tebukonazol 430 g/l",
+    "formulation": "SC",
+    "registration": "01020120083267",
+    "packs": [
+      60.0,
+      100.0,
+      240.0
+    ],
+    "crops": [
+      "Anggrek",
+      "Apel",
+      "Bawang merah",
+      "Cabai",
+      "Jagung",
+      "Jeruk",
+      "Kakao",
+      "Karet",
+      "Kedelai",
+      "Kelapa sawit",
+      "Mangga",
+      "Melon",
+      "Padi",
+      "Pisang",
+      "Semangka",
+      "Stroberi",
+      "Teh",
+      "Tomat"
+    ],
+    "summary": "Fungisida sistemik dengan formulasi suspensi.",
+    "notes": "Halaman berjudul Folicur Gold menampilkan nama formulasi Folicur 430 SC.",
+    "source": "https://www.bayer.com/id/id/folicur-gold",
+    "uses": [],
+    "sprayCalculator": true,
+    "sourceStatus": "archive",
+    "currentSource": null
+  },
+  {
+    "id": "luna-smart",
+    "name": "Luna Smart 250/250 SC",
+    "category": "Fungisida",
+    "unit": "ml",
+    "ingredients": "Fluopiram 250 g/l; trifloksistrobin 250 g/l",
+    "formulation": "SC",
+    "registration": "01020120196455",
+    "packs": [
+      50.0,
+      100.0
+    ],
+    "crops": [
+      "Apel",
+      "Bawang merah",
+      "Cabai",
+      "Mangga"
+    ],
+    "summary": "Fungisida sistemik untuk penyakit tertentu pada hortikultura.",
+    "notes": "Pilih sasaran yang cocok; tidak semua bercak daun mempunyai penyebab sama.",
+    "source": "https://www.bayer.com/id/id/luna-smart",
+    "uses": [
+      {
+        "crop": "Cabai",
+        "target": "Antraknosa",
+        "dose": "1 ml/l; air 500-750 l/ha",
+        "method": "Semprot volume tinggi saat gejala ditemukan."
+      },
+      {
+        "crop": "Bawang merah",
+        "target": "Bercak ungu",
+        "dose": "1 ml/l; air 500-750 l/ha",
+        "method": "Semprot volume tinggi saat gejala ditemukan."
+      },
+      {
+        "crop": "Mangga",
+        "target": "Antraknosa",
+        "dose": "2 ml/l; air 750-1000 l/ha",
+        "method": "Semprot volume tinggi saat gejala ditemukan."
+      },
+      {
+        "crop": "Apel",
+        "target": "Embun tepung",
+        "dose": "1 ml/l; air 750-1000 l/ha",
+        "method": "Semprot volume tinggi saat gejala ditemukan."
+      }
+    ],
+    "sprayCalculator": true,
+    "sourceStatus": "archive",
+    "currentSource": null
+  },
+  {
+    "id": "previcur",
+    "name": "Previcur N 722 SL",
+    "category": "Fungisida",
+    "unit": "ml",
+    "ingredients": "Propamokarb hidroklorida 722 g/l",
+    "formulation": "SL",
+    "registration": "0102011982612",
+    "packs": [
+      100.0,
+      500.0
+    ],
+    "crops": [
+      "Bawang merah",
+      "Cabai",
+      "Kentang",
+      "Kubis",
+      "Melon",
+      "Pinus",
+      "Tembakau",
+      "Tomat"
+    ],
+    "summary": "Fungisida sistemik; cara aplikasi mencakup semprot dan siram sesuai sasaran.",
+    "notes": "Persemaian dan tanaman dewasa dapat memakai cara aplikasi berbeda.",
+    "source": "https://www.bayer.com/id/id/previcur",
+    "uses": [
+      {
+        "crop": "Bawang merah",
+        "target": "Embun bulu",
+        "dose": "500-750 ml/ha",
+        "method": "Semprot volume tinggi saat gejala ditemukan."
+      },
+      {
+        "crop": "Kentang",
+        "target": "Busuk daun",
+        "dose": "3 ml/l",
+        "method": "Semprot bila lebih dari 1 bercak aktif per 10 tanaman dan cuaca berkabut/kelembapan tinggi."
+      },
+      {
+        "crop": "Tomat",
+        "target": "Busuk daun",
+        "dose": "3-6 ml/l",
+        "method": "Semprot bila lebih dari 1 bercak aktif per 10 tanaman dan cuaca berkabut/kelembapan tinggi."
+      }
+    ],
+    "sprayCalculator": true,
+    "sourceStatus": "archive",
+    "currentSource": null
+  },
+  {
+    "id": "trivia",
+    "name": "Trivia 73 WP",
+    "category": "Fungisida",
+    "unit": "g",
+    "ingredients": "Fluopikolid 6%; propineb 66,7%",
+    "formulation": "WP",
+    "registration": "01020120072819",
+    "packs": [
+      50.0,
+      200.0
+    ],
+    "crops": [
+      "Anggrek",
+      "Apel",
+      "Bawang daun",
+      "Bawang merah",
+      "Cabai",
+      "Durian",
+      "Jagung",
+      "Kacang panjang",
+      "Kakao",
+      "Kedelai",
+      "Kentang",
+      "Kubis",
+      "Krisan",
+      "Lada",
+      "Melon",
+      "Mentimun",
+      "Padi",
+      "Semangka",
+      "Tembakau",
+      "Tomat"
+    ],
+    "summary": "Fungisida kontak dan translaminar untuk penyakit tertentu.",
+    "notes": "Takaran perlakuan benih tidak boleh dipakai sebagai dosis per hektare.",
+    "source": "https://www.bayer.com/id/id/trivia",
+    "uses": [
+      {
+        "crop": "Kentang",
+        "target": "Hawar daun",
+        "dose": "750 g/ha",
+        "method": "Saat gejala ditemukan; interval 3-4 hari."
+      },
+      {
+        "crop": "Bawang merah",
+        "target": "Bercak ungu; busuk daun",
+        "dose": "1,5-2,25 kg/ha",
+        "method": "Saat gejala ditemukan; interval 3-4 hari."
+      },
+      {
+        "crop": "Cabai",
+        "target": "Antraknosa; busuk buah",
+        "dose": "1,5-2,25 kg/ha",
+        "method": "Saat gejala ditemukan; interval 3-4 hari."
+      },
+      {
+        "crop": "Tomat",
+        "target": "Hawar daun",
+        "dose": "1,5-2,25 kg/ha",
+        "method": "Saat gejala ditemukan; interval 3-4 hari."
+      }
+    ],
+    "sprayCalculator": true,
+    "sourceStatus": "archive",
+    "currentSource": null
+  },
+  {
+    "id": "adengo",
+    "name": "Adengo 315 SC",
+    "category": "Herbisida",
+    "unit": "ml",
+    "ingredients": "Isoksaflutol 225 g/l; tienkarbazon-metil 90 g/l",
+    "formulation": "SC",
+    "registration": "01030120134842",
+    "packs": [
+      50.0,
+      100.0
+    ],
+    "crops": [
+      "Jagung"
+    ],
+    "summary": "Herbisida untuk gulma tertentu pada pertanaman jagung.",
+    "notes": "Perhatikan fase pertumbuhan gulma dan tanaman pada label.",
+    "source": "https://www.bayer.com/id/id/adengo",
+    "uses": [
+      {
+        "crop": "Jagung",
+        "target": "Gulma daun lebar dan rumput yang tercantum pada label",
+        "dose": "300-375 ml/ha",
+        "method": "Periksa fase pra/purnatumbuh dan jenis gulma pada label."
+      }
+    ],
+    "sprayCalculator": true,
+    "sourceStatus": "archive",
+    "currentSource": null
+  },
+  {
+    "id": "becano",
+    "name": "Becano 500 SC",
+    "category": "Herbisida",
+    "unit": "ml",
+    "ingredients": "Indaziflam 500 g/l",
+    "formulation": "SC",
+    "registration": "01030120124279",
+    "packs": [
+      250.0,
+      500.0,
+      1000.0
+    ],
+    "crops": [
+      "Kelapa sawit",
+      "Karet",
+      "Tebu"
+    ],
+    "summary": "Herbisida pratumbuh untuk pengendalian gulma perkebunan.",
+    "notes": "Tanaman menghasilkan, belum menghasilkan, dan persiapan lahan memiliki ketentuan berbeda.",
+    "source": "https://www.bayer.com/en/id/becano",
+    "uses": [],
+    "sprayCalculator": true,
+    "sourceStatus": "archive",
+    "currentSource": null
+  },
+  {
+    "id": "council-complete",
+    "name": "Council Complete 300 SC",
+    "category": "Herbisida",
+    "unit": "ml",
+    "ingredients": "Triafamone 100 g/l; tefuryltrione 200 g/l",
+    "formulation": "SC",
+    "registration": "01030120175744",
+    "packs": [
+      50.0,
+      100.0
+    ],
+    "crops": [
+      "Padi"
+    ],
+    "summary": "Herbisida selektif untuk padi tanam pindah dan tanam benih langsung.",
+    "notes": "Referensi Bayer menyebut 0-6 HST; periksa sistem tanam serta label, bukan jadwal universal.",
+    "source": "https://www.bayer.com/id/id/council-complete",
+    "uses": [],
+    "sprayCalculator": true,
+    "sourceStatus": "current-page",
+    "currentSource": "https://www.bayer.com/id-id/indonesia/divisi/crop-science/herbisida"
+  },
+  {
+    "id": "ricestar",
+    "name": "Ricestar 69 EC",
+    "category": "Herbisida",
+    "unit": "ml",
+    "ingredients": "Fenoksaprop-p-etil 69 g/l",
+    "formulation": "EC",
+    "registration": "",
+    "packs": [
+      100.0
+    ],
+    "crops": [
+      "Padi"
+    ],
+    "summary": "Herbisida sistemik purnatumbuh untuk gulma rerumputan pada padi.",
+    "notes": "Nomor pendaftaran dan ukuran kemasan lain perlu dicek pada label; penulisan halaman sumber tidak lengkap.",
+    "source": "https://www.bayer.com/id/id/ricestar",
+    "uses": [
+      {
+        "crop": "Padi",
+        "target": "Echinochloa crus-galli; Leptochloa chinensis",
+        "dose": "0,3-0,5 l/ha",
+        "method": "Herbisida purnatumbuh; cocokkan jenis gulma."
+      }
+    ],
+    "sprayCalculator": true,
+    "sourceStatus": "archive",
+    "currentSource": null
+  },
+  {
+    "id": "ricestar-xtra",
+    "name": "Ricestar Xtra 89 OD",
+    "category": "Herbisida",
+    "unit": "ml",
+    "ingredients": "Fenoksaprop-p-etil 69 g/l; etoksisulfuron 20 g/l",
+    "formulation": "OD",
+    "registration": "01030120072815",
+    "packs": [
+      100.0,
+      250.0
+    ],
+    "crops": [
+      "Padi"
+    ],
+    "summary": "Herbisida sistemik purnatumbuh untuk gulma tertentu pada padi.",
+    "notes": "Padi sawah, tabela, dan padi gogo mempunyai petunjuk berbeda.",
+    "source": "https://www.bayer.com/id/id/ricestar-xtra",
+    "uses": [],
+    "sprayCalculator": true,
+    "sourceStatus": "archive",
+    "currentSource": null
+  },
+  {
+    "id": "rumpas",
+    "name": "Rumpas 110 EW",
+    "category": "Herbisida",
+    "unit": "ml",
+    "ingredients": "Fenoksaprop-p-etil 110 g/l",
+    "formulation": "EW",
+    "registration": "01030119931099",
+    "packs": [
+      100.0,
+      250.0
+    ],
+    "crops": [
+      "Bawang merah",
+      "Cabai",
+      "Kacang hijau",
+      "Kacang panjang",
+      "Kacang tanah",
+      "Kedelai",
+      "Mentimun",
+      "Nanas",
+      "Padi",
+      "Tebu"
+    ],
+    "summary": "Herbisida kontak dan sistemik purnatumbuh menurut halaman Indonesia.",
+    "notes": "Penggunaan pada tebu perlu petunjuk khusus; jangan memakai takaran dari tanaman lain.",
+    "source": "https://www.bayer.com/id/id/rumpas",
+    "uses": [
+      {
+        "crop": "Padi",
+        "target": "Gulma rumput (Echinochloa crus-galli)",
+        "dose": "100-200 ml/ha",
+        "method": "Penyemprotan volume tinggi."
+      }
+    ],
+    "sprayCalculator": true,
+    "sourceStatus": "archive",
+    "currentSource": null
+  },
+  {
+    "id": "velum",
+    "name": "Velum Prime 400 SC",
+    "category": "Nematisida",
+    "unit": "ml",
+    "ingredients": "Fluopiram 400 g/l",
+    "formulation": "SC",
+    "registration": "01130120186234",
+    "packs": [
+      100.0,
+      250.0
+    ],
+    "crops": [
+      "Cabai",
+      "Kentang",
+      "Melon",
+      "Semangka",
+      "Tomat",
+      "Wortel"
+    ],
+    "summary": "Nematisida untuk sasaran di daerah perakaran.",
+    "notes": "Pengocoran/perakaran bukan penyemprotan daun; tidak dimasukkan ke kalkulator semprot.",
+    "source": "https://www.bayer.com/id/id/velum",
+    "uses": [
+      {
+        "crop": "Cabai",
+        "target": "Nematoda bintil akar (Meloidogyne sp.)",
+        "dose": "750 ml/ha",
+        "method": "Kocor daerah akar 1-2 hari setelah pindah tanam."
+      },
+      {
+        "crop": "Kentang",
+        "target": "Nematoda sista kuning (Globodera sp.)",
+        "dose": "1 l/ha",
+        "method": "Semprot/kocor daerah akar 0-20 hari setelah tanam."
+      },
+      {
+        "crop": "Tomat",
+        "target": "Nematoda bintil akar",
+        "dose": "600 ml/ha",
+        "method": "Kocor daerah akar 1-2 hari setelah pindah tanam."
+      },
+      {
+        "crop": "Melon",
+        "target": "Nematoda bintil akar",
+        "dose": "0,5 l/ha",
+        "method": "Semprot/kocor daerah akar 0-1 hari setelah pindah tanam."
+      }
+    ],
+    "sprayCalculator": false,
+    "sourceStatus": "current-page",
+    "currentSource": "https://www.bayer.com/id-id/indonesia/divisi/crop-science/velum"
+  },
+  {
+    "id": "agridex",
+    "name": "Agridex 715 EC",
+    "category": "Adjuvan",
+    "unit": "ml",
+    "ingredients": "Minyak parafinik 715 g/l",
+    "formulation": "EC",
+    "registration": "",
+    "packs": [
+      1000.0,
+      5000.0
+    ],
+    "crops": [],
+    "summary": "Perata dan penetran larutan semprot.",
+    "notes": "Bukan obat pembasmi penyakit. Kesesuaian campuran harus mengikuti label tiap produk.",
+    "source": "https://www.bayer.com/id/id/agridex",
+    "uses": [],
+    "sprayCalculator": false,
+    "sourceStatus": "archive",
+    "currentSource": null
+  },
+  {
+    "id": "ambition",
+    "name": "Ambition",
+    "category": "Aktivator tanaman",
+    "unit": "ml",
+    "ingredients": "Asam amino, asam fulvat, unsur mikro",
+    "formulation": "",
+    "registration": "",
+    "packs": [
+      500.0,
+      1000.0
+    ],
+    "crops": [
+      "Padi",
+      "Jagung",
+      "Kedelai",
+      "Cabai",
+      "Bawang merah",
+      "Kentang",
+      "Tomat",
+      "Kubis",
+      "Wortel",
+      "Kacang panjang",
+      "Mangga",
+      "Pisang",
+      "Jeruk",
+      "Durian",
+      "Melon",
+      "Semangka",
+      "Kelapa sawit",
+      "Karet",
+      "Teh",
+      "Kopi",
+      "Tebu"
+    ],
+    "summary": "Aktivator tanaman untuk mendukung pertumbuhan.",
+    "notes": "Bukan pengganti diagnosis atau pengendalian penyakit.",
+    "source": "https://www.bayer.com/id-id/indonesia/divisi/crop-science/ambition",
+    "uses": [],
+    "sprayCalculator": false,
+    "sourceStatus": "current-page",
+    "currentSource": "https://www.bayer.com/id-id/indonesia/divisi/crop-science/ambition"
+  },
+  {
+    "id": "ethrel-480-sl",
+    "name": "Ethrel 480 SL",
+    "category": "Pengatur tumbuh",
+    "unit": "ml",
+    "ingredients": "Etefon 480 g/l",
+    "formulation": "SL",
+    "registration": "010401197493",
+    "packs": [
+      100.0
+    ],
+    "crops": [
+      "Apel",
+      "Kedelai",
+      "Kopi",
+      "Nanas",
+      "Pisang",
+      "Tembakau"
+    ],
+    "summary": "Pengatur tumbuh dengan tujuan penggunaan berbeda menurut tanaman.",
+    "notes": "Pencelupan buah dan penyemprotan tanaman tidak dapat disamakan.",
+    "source": "https://www.bayer.com/id/id/ethrel-480-sl",
+    "uses": [],
+    "sprayCalculator": false,
+    "sourceStatus": "current-page",
+    "currentSource": "https://www.bayer.com/id-id/indonesia/divisi/crop-science/ethrel-480-sl"
+  },
+  {
+    "id": "ethrel-10-pa",
+    "name": "Ethrel 10 PA",
+    "category": "Pengatur tumbuh",
+    "unit": null,
+    "ingredients": "",
+    "formulation": "",
+    "registration": "",
+    "packs": [],
+    "crops": [
+      "Karet"
+    ],
+    "summary": "Nama tercantum dalam portofolio Bayer; tabel tanaman mencantumkan karet.",
+    "notes": "Rincian formulasi, kemasan, dan dosis Indonesia belum berhasil diverifikasi. Jangan mengacu pada label negara lain.",
+    "source": "https://www.bayer.com/id/id/produk/indonesia-crop-protection",
+    "uses": [],
+    "sprayCalculator": false,
+    "sourceStatus": "archive",
+    "currentSource": null
+  },
+  {
+    "id": "gaucho",
+    "name": "Gaucho 350 FS",
+    "category": "Perlakuan benih",
+    "unit": "ml",
+    "ingredients": "Imidakloprid 350 g/l",
+    "formulation": "FS",
+    "registration": "",
+    "packs": [
+      20.0,
+      50.0
+    ],
+    "crops": [
+      "Kacang tanah",
+      "Jagung",
+      "Kacang panjang",
+      "Kedelai",
+      "Padi",
+      "Tembakau"
+    ],
+    "summary": "Insektisida sistemik untuk perlakuan benih; tembakau memakai penyiraman.",
+    "notes": "Takaran per kg benih tidak dapat dihitung dengan kalkulator per hektare. Verifikasi nomor registrasi pada kemasan.",
+    "source": "https://www.bayer.com/id/id/gaucho",
+    "uses": [
+      {
+        "crop": "Jagung",
+        "target": "Lalat bibit (Atherigona sp.)",
+        "dose": "4-8 ml/kg benih",
+        "method": "Perlakuan benih, bukan semprot daun."
+      },
+      {
+        "crop": "Padi",
+        "target": "Wereng hijau",
+        "dose": "8 ml/kg benih",
+        "method": "Perlakuan benih, bukan semprot daun."
+      },
+      {
+        "crop": "Kedelai",
+        "target": "Lalat bibit",
+        "dose": "1-2 ml/kg benih",
+        "method": "Perlakuan benih, bukan semprot daun."
+      }
+    ],
+    "sprayCalculator": false,
+    "sourceStatus": "archive",
+    "currentSource": null
+  },
+  {
+    "id": "immune-start",
+    "name": "Immune Start 200/80 FS",
+    "category": "Perlakuan benih",
+    "unit": "ml",
+    "ingredients": "Isotianil 200 g/l; trifloksistrobin 80 g/l",
+    "formulation": "FS",
+    "registration": "01020120196544",
+    "packs": [
+      100.0,
+      5000.0
+    ],
+    "crops": [
+      "Padi"
+    ],
+    "summary": "Fungisida sistemik untuk perlakuan benih padi.",
+    "notes": "Dosis dinyatakan per kg benih, bukan per tangki semprot.",
+    "source": "https://www.bayer.com/id/id/immune-start",
+    "uses": [
+      {
+        "crop": "Padi",
+        "target": "Blas (Pyricularia oryzae)",
+        "dose": "5 ml/kg benih",
+        "method": "Perlakuan benih."
+      }
+    ],
+    "sprayCalculator": false,
+    "sourceStatus": "archive",
+    "currentSource": null
+  }
+]

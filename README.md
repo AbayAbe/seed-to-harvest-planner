@@ -254,10 +254,49 @@ umur tanaman dan perkiraan panen berdasarkan kalender, bukan hasil pengamatan.
 Verifikasi versi Pages: `npm run build:pages` dengan
 `PAGES_BASE_PATH=/seed-to-harvest-planner`, kemudian `npm run test:pages`.
 
-Fitur Klinik Tanaman (unggah foto, OpenAI Vision, pencocokan katalog dan dosis
-contoh) tersedia di `/klinik/`. Lihat [panduan Klinik Tanaman](KLINIK-TANAMAN.md)
-untuk konfigurasi API key, backend terpisah, dan GitHub Pages.
+Klinik Tanaman yang aktif menyediakan pratinjau foto dan catatan pengamatan lokal;
+analisis AI belum diaktifkan. Implementasi API terpisah dijelaskan dalam
+[panduan Klinik Tanaman](KLINIK-TANAMAN.md). Semua menu berpindah panel dalam
+dashboard yang sama; URL lama `/klinik/`, `/keuangan/`, dan `/riwayat/` tetap tersedia.
 
 Buku Kas Tani dan Riwayat Penyakit tersedia di `/keuangan/` dan `/riwayat/`.
 Keduanya bekerja lokal pada GitHub Pages dan ikut cadangan lahan.
 Lihat [skema, endpoint, dan panduan fitur](BUKU-KAS-RIWAYAT.md).
+
+## Referensi Bayer Indonesia
+
+Panel `#panduan` memuat 29 identitas produk/referensi arsip, 40 jenis tanaman
+yang disebut dalam koleksi, dan 64 pasangan tanaman–sasaran. Penelusuran dilakukan
+17 November 2026 terhadap sumber resmi Bayer Indonesia. Ini bukan daftar lengkap
+produk yang masih dipasarkan atau pemeriksaan izin edar aktif.
+
+Data terpusat di `backend/src/lib/bayer/products.json`, dipakai bersama oleh
+frontend statis dan backend. `source` mempertahankan URL asal penelusuran arsip;
+`currentSource` hanya diisi untuk delapan halaman produk yang masih cocok dengan
+identitasnya. Sebagian URL lama mengembalikan 404 atau mengalihkan ke produk lain.
+Karena itu, tautan arsip ditampilkan sebagai asal data, bukan tombol menuju label
+terbaru. Semua angka pada `uses` tetap teks referensi arsip, bukan preset dosis.
+Nomor registrasi adalah transkripsi sumber, bukan bukti masa berlaku saat ini.
+
+- Pencarian mencakup produk, bahan aktif, tanaman, kategori, dan sasaran.
+- Kalkulator menerima 22 identitas produk semprot; dosis/air tetap manual dari label.
+- Perlakuan benih, nematisida perakaran, adjuvan, dan pengatur/aktivator tumbuh
+  tidak dimasukkan ke kalkulator semprot per hektare.
+- Klinik, jadwal, dan riwayat menampilkan pasangan tanaman–sasaran sebagai bahan
+  bacaan, tanpa diagnosis atau resep otomatis.
+- Buku Kas dapat menerima nama dan satuan katalog; harga selalu dari pengguna.
+  Kemasan otomatis hanya jika satu ukuran diketahui, selain itu harus diisi.
+- Roundup dan varietas DEKALB tidak diperkaya dengan spesifikasi/dosis yang belum
+  berhasil diverifikasi dari label resmi Indonesia dalam penelusuran ini.
+
+Sumber profil dan kontak: [Bayer Indonesia](https://www.bayer.com/id-id/indonesia),
+[kontak resmi](https://www.bayer.com/id-id/indonesia/hubungi-kami),
+[program Better Life Farming](https://www.bayer.com/id/id/indonesia-program-better-life-farming).
+Sumber identitas awal: [portofolio historis Bayer](https://www.bayer.com/id/id/produk/indonesia-crop-protection).
+URL per produk disimpan bersama setiap entri, termasuk catatan perbedaan kadar
+Valacor antara halaman bahasa Indonesia dan Inggris serta data yang tidak lengkap.
+
+Perbarui data dengan memeriksa identitas formulasi, negara, tanaman, sasaran,
+cara aplikasi, satuan, dan masa berlaku label. Jangan mengganti produk berdasarkan
+pengalihan URL, menyamakan g/l dengan g/ha, atau memakai label negara lain.
+Uji konsistensi: `node --import tsx --test tests/bayer.test.ts tests/api.test.ts`.

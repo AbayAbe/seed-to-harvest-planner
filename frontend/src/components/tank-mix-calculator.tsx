@@ -6,6 +6,7 @@ import type { FormErrors, ProductCatalogItem, TankMixResult } from "@agri/contra
 import { ApiError, requestApi } from "../lib/api";
 import { EMPTY_TANK_MIX, validateTankMix, formatApproximate, formatQuantity, type TankMixForm } from "../lib/tank-mix/form";
 
+import { ProductReference } from "./bayer-reference";
 import { useDashboardNavigation } from "./dashboard-navigation";
 
 export default function KalkulatorDosis({ products: PRODUCT_CATALOG, luasAwal = null }: { products: readonly ProductCatalogItem[]; luasAwal?: number | null }) {
@@ -37,6 +38,13 @@ export default function KalkulatorDosis({ products: PRODUCT_CATALOG, luasAwal = 
     setPending(false);
     setServerErrors({});
   }
+
+  useEffect(() => {
+    const selection=navigation?.selection;
+    if(selection?.view!=="tank-mix"||!PRODUCT_CATALOG.some(p=>p.id===selection.productId))return;
+    setForm(current=>({...current,productId:selection.productId,dose:"",water:""}));
+    requestRef.current?.abort();setResult(null);setPending(false);setServerErrors({});setAttempted(false);setTouched({});
+  },[navigation?.selection,PRODUCT_CATALOG]);
 
   function change(key: keyof TankMixForm, value: string) {
     setForm((current) => key === "productId"
@@ -89,8 +97,9 @@ export default function KalkulatorDosis({ products: PRODUCT_CATALOG, luasAwal = 
   return <div className="calculator-grid">
     <form noValidate onSubmit={submit} className="surface mix-form">
       <div className="form-heading"><div><p className="section-kicker">RINCIAN PENYEMPROTAN</p><h2>Mulai dengan kebutuhan Anda</h2></div><span className="form-counter">{completed}/5 terisi</span></div>
-      <fieldset className="form-section"><legend><span className="step-number">01</span> Pilih produk</legend><label className="field-label sr-only" htmlFor={`${uid}-productId`}>Produk Bayer</label><select name="productId" id={`${uid}-productId`} className="field-input" value={form.productId} onChange={(event) => change("productId", event.target.value)} aria-invalid={attempted && !!evaluation.errors.productId} aria-describedby={attempted && evaluation.errors.productId ? `${uid}-product-error` : undefined}><option value="">Pilih produk Bayer…</option>{["Fungisida", "Insektisida"].map((category) => <optgroup label={category} key={category}>{PRODUCT_CATALOG.filter((item) => item.category === category).map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</optgroup>)}</select>{attempted && evaluation.errors.productId && <p id={`${uid}-product-error`} className="field-error">{evaluation.errors.productId}</p>}
+      <fieldset className="form-section"><legend><span className="step-number">01</span> Pilih produk</legend><label className="field-label sr-only" htmlFor={`${uid}-productId`}>Produk Bayer</label><select name="productId" id={`${uid}-productId`} className="field-input" value={form.productId} onChange={(event) => change("productId", event.target.value)} aria-invalid={attempted && !!evaluation.errors.productId} aria-describedby={attempted && evaluation.errors.productId ? `${uid}-product-error` : undefined}><option value="">Pilih produk Bayer…</option>{["Fungisida", "Insektisida", "Herbisida"].map((category) => <optgroup label={category} key={category}>{PRODUCT_CATALOG.filter((item) => item.category === category).map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</optgroup>)}</select>{attempted && evaluation.errors.productId && <p id={`${uid}-product-error`} className="field-error">{evaluation.errors.productId}</p>}
         {product && <div className="selected-product"><span className="badge badge-green">{product.category}</span><a className="reference-link" href={product.source} target="_blank" rel="noreferrer">Informasi Bayer <ArrowUpRight size={16}/><span className="sr-only"> (buka tab baru)</span></a></div>}
+        {product && <ProductReference productId={product.id}/>}
       </fieldset>
       <fieldset className="form-section"><legend><span className="step-number">02</span> Lahan & tangki</legend><div className="grid gap-5 sm:grid-cols-2">{input("area", "Luas lahan (hektare)", "ha", "Contoh: 1")}{input("capacity", "Kapasitas tangki (liter)", "L", "Contoh: 15")}</div><p id={`${uid}-number-help`} className="field-help">Koma atau titik boleh: 0,5 = setengah hektare. Tanpa pemisah ribuan.</p></fieldset>
       <fieldset className="form-section"><legend><span className="step-number">03</span> Takaran pada label</legend><div className="label-guidance"><Info size={18}/><p>Gunakan dosis untuk <strong>tanaman dan sasaran yang sesuai</strong>. Kalkulator ini menerima dosis per hektare. Jika label memakai dosis per liter, tanyakan konversinya kepada petugas pertanian.</p></div><div className="mt-5 grid gap-5 sm:grid-cols-2">{input("dose", `Dosis produk (${unit}/ha)`, `${unit}/ha`, product ? "Dari label" : "Pilih produk dulu")}{input("water", "Air per hektare (liter/ha)", "L/ha", product ? "Sesuai petunjuk" : "Pilih produk dulu")}</div><p className="field-help">Produk diganti → takaran dikosongkan agar tidak tertukar.</p></fieldset>

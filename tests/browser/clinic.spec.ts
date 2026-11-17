@@ -15,7 +15,7 @@ test("dashboard klinik menyimpan pengamatan tanpa mengirim foto ke API", async (
   await page.getByLabel("Nama lahan", { exact: false }).fill("Kebun utara");
   await page.getByLabel("Catatan gejala", { exact: true }).fill("Daun terlihat menguning sejak kemarin.");
   await page.getByRole("button", { name: "Simpan catatan" }).click();
-  await expect(page.getByRole("status")).toContainText("Catatan tersimpan");
+  await expect(page.getByRole("form", { name: "Catatan pengamatan tanaman" }).getByRole("status")).toContainText("Catatan tersimpan");
   await page.reload();
   await expect(page.getByLabel("Riwayat pengamatan")).toContainText("Kebun utara");
   await expect(page.getByLabel("Riwayat pengamatan")).toContainText("Daun terlihat menguning");
@@ -39,5 +39,5 @@ test("invalid file and unavailable storage do not give false success", async ({ 
   await page.evaluate(() => { Storage.prototype.setItem = () => { throw new DOMException("Full", "QuotaExceededError"); }; });
   await page.getByRole("button", { name:"Simpan catatan" }).click();
   await expect(page.locator("p[role=alert]")).toContainText("Catatan belum tersimpan");
-  await expect(page.getByRole("status")).toHaveCount(0);
+  await expect(page.getByRole("form", { name: "Catatan pengamatan tanaman" }).getByRole("status")).toHaveCount(0);
 });
