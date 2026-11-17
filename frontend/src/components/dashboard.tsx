@@ -48,7 +48,7 @@ function RuangJuragan({ pengguna, onKeluar }: { pengguna: Pengguna; onKeluar: ()
     <div className="app-shell">
       <a className="skip-link" href="#main-content">Langsung ke isi</a>
       <aside className="sidebar">
-        <div className="brand"><span className="brand-mark"><Sprout size={25} /></span><div><strong>Bayer<span className="brand-dot">.</span></strong><span>Perencana tani</span></div></div>
+        <div className="brand"><span className="brand-mark"><Sprout size={25} /></span><div><strong>Cyphera<span className="brand-dot">.</span></strong><span>Perencana tani</span></div></div>
         <p className="sidebar-caption">RUANG KERJA</p>
         <nav aria-label="Menu utama" className="side-nav">
           {navigation.map(({ id, label, detail, Icon }) => <button type="button" key={id} onClick={() => setView(id)} aria-pressed={view === id} aria-controls={`${id}-panel`} className={`nav-item ${view === id ? "is-active" : ""}`}><Icon size={22} /><span><strong>{label}</strong><small>{detail}</small></span><span className="nav-indicator" /></button>)}
@@ -71,7 +71,7 @@ function RuangJuragan({ pengguna, onKeluar }: { pengguna: Pengguna; onKeluar: ()
             <div id="timeline-panel" hidden={view !== "timeline"}><PlannerTimeline key={lahanAktif?.id ?? "umum"} lahan={lahanAktif} catalog={catalog.data} onOpenCalculator={() => setView("tank-mix")} /></div>
             <div id="tank-mix-panel" hidden={view !== "tank-mix"}><KalkulatorDosis key={lahanAktif?.id ?? "umum"} products={catalog.data.products} luasAwal={lahanAktif?.luasHektare ?? null} /></div>
           </>}
-          <footer className="workspace-footer"><span>Bayer · Perencana tani</span><span>Rencanakan dengan jelas, gunakan sesuai label.</span></footer>
+          <footer className="workspace-footer"><span>Cyphera · Perencana tani</span><span>Rencanakan dengan jelas, gunakan sesuai label.</span></footer>
         </main>
       </div>
     </div>

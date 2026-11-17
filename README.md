@@ -1,4 +1,4 @@
-# Bayer Seed-to-Harvest Planner
+# Cyphera - Platform Manajemen Pertanian
 
 Aplikasi berbahasa Indonesia untuk manajemen multi-lahan, simulasi cuaca per lokasi,
 jadwal tanam, dan perhitungan campuran satu produk. Frontend dan backend merupakan **dua layanan terpisah** dalam satu

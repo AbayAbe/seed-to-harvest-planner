@@ -46,7 +46,7 @@ export default function LoginNomorHp({ onMasuk }: { onMasuk: () => void }) {
 
   return <main className="login-layout">
     <section className="login-story">
-      <div className="brand"><span className="brand-mark"><Sprout size={28}/></span><div><strong>Bayer<span className="brand-dot">.</span></strong><span>Ruang kendali lahan</span></div></div>
+      <div className="brand"><span className="brand-mark"><Sprout size={28}/></span><div><strong>Cyphera<span className="brand-dot">.</span></strong><span>Ruang kendali lahan</span></div></div>
       <div className="login-story-copy"><p className="light-eyebrow"><Leaf size={18}/> DARI BENIH HINGGA PANEN</p><h2>Banyak lahan.{" "}<br/>Tetap dalam{" "}<br/><span>genggaman.</span></h2><p>Pantau cuaca dan rencana tanam di setiap lahan, dari satu tempat.</p>
         <div className="login-benefits"><span><MapPinned/>Lokasi lahan tersimpan</span><span><CloudSun/>Cuaca untuk tiap lahan</span><span><Check/>Jadwal lebih teratur</span></div>
       </div>
