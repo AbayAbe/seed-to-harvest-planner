@@ -166,7 +166,7 @@ test("ubah lahan mempertahankan identitas dan kegiatan", async ({ page }) => {
 
 test("klinik Pages bekerja tanpa API", async ({ page }) => {
   await page.goto(base);
-  await page.getByRole("link", { name: /Klinik tanaman/ }).click();
+  await page.getByRole("button", { name: /Klinik tanaman/ }).click();
   await expect(page.getByRole("heading", { name: /Tanaman terpantau/ })).toBeVisible();
   await expect(page.getByText("Analisis AI", { exact: false }).first()).toBeVisible();
   await expect(page.getByRole("button", { name: "Simpan catatan", exact: true })).toBeEnabled();
@@ -175,14 +175,14 @@ test("klinik Pages bekerja tanpa API", async ({ page }) => {
   await page.reload();
   await expect(page.getByLabel("Riwayat pengamatan")).toContainText("Daun bawah menguning");
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBeTruthy();
-  await page.getByRole("link", { name: /Kembali ke lahan saya/ }).click();
+  await page.getByRole("button", { name: "Lahan saya", exact: true }).click();
   await expect(page.getByRole("button", { name: "Coba dengan 3 lahan contoh" })).toBeVisible();
 });
 
 test("buku kas dan riwayat penyakit berjalan lokal serta ikut cadangan", async ({ page }) => {
   const apiCalls: string[] = [];page.on("request",r=>{if(r.url().includes("/api/"))apiCalls.push(r.url());});
   await page.goto(base);await page.getByRole("button",{name:"Coba dengan 3 lahan contoh"}).click();
-  await page.getByRole("link",{name:/Buku kas tani/}).click();
+  await page.getByRole("button",{name:/Buku kas tani/}).click();
   await expect(page.getByRole("button",{name:"Simpan harga produk"})).toBeEnabled();
   await page.getByLabel("Nama produk harga",{exact:true}).fill("Produk uji cair");
   await page.getByLabel("Isi kemasan",{exact:true}).fill("1000");
@@ -200,7 +200,7 @@ test("buku kas dan riwayat penyakit berjalan lokal serta ikut cadangan", async (
   await page.setViewportSize({width:1440,height:1000});await page.screenshot({path:"output/ui-review/finance-desktop.png",fullPage:true});
   await page.setViewportSize({width:390,height:844});expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBeTruthy();
   await page.screenshot({path:"output/ui-review/finance-mobile.png",fullPage:true});
-  await page.getByRole("link",{name:"Riwayat penyakit",exact:true}).click();
+  await page.getByRole("button",{name:"Riwayat penyakit",exact:true}).click();
   await expect(page.getByRole("button",{name:"Simpan pengamatan"})).toBeEnabled();
   await page.getByRole("combobox",{name:"Lahan pengamatan",exact:true}).selectOption({label:"Lahan Jagung A"});
   for(const symptom of ["Bercak daun","bercak daun"]){await page.getByLabel("Gejala atau nama penyakit",{exact:true}).fill(symptom);await page.getByRole("button",{name:"Simpan pengamatan"}).click();await expect(page.getByLabel("Gejala atau nama penyakit",{exact:true})).toHaveValue("");}
@@ -211,7 +211,7 @@ test("buku kas dan riwayat penyakit berjalan lokal serta ikut cadangan", async (
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBeTruthy();
   await page.getByRole("combobox",{name:"Filter lahan",exact:true}).selectOption({label:"Lahan Padi B"});
   await expect(page.getByLabel("Frekuensi per lahan",{exact:true})).toContainText("Belum ada pola");
-  await page.getByRole("link",{name:/Lahan saya/}).click();
+  await page.getByRole("button",{name:"Lahan saya",exact:true}).click();
   const backup=await page.evaluate(()=>localStorage.getItem("agri:workspace:v2")!);
   expect(JSON.parse(backup).records.cash).toHaveLength(2);expect(JSON.parse(backup).records.diseases).toHaveLength(2);
   await page.getByLabel("File cadangan").setInputFiles({name:"restore.json",mimeType:"application/json",buffer:Buffer.from(backup)});
@@ -222,7 +222,7 @@ test("buku kas dan riwayat penyakit berjalan lokal serta ikut cadangan", async (
 
 test("buku kas menolak jumlah invalid dan kegagalan penyimpanan",async({page})=>{
   await page.goto(base);await page.getByRole("button",{name:"Coba dengan 3 lahan contoh"}).click();
-  await page.getByRole("link",{name:/Buku kas tani/}).click();
+  await page.getByRole("button",{name:/Buku kas tani/}).click();
   await page.getByRole("button",{name:"Simpan transaksi"}).click();
   await expect(page.locator("p[role=alert]")).toContainText("Pilih harga produk");
   await page.getByRole("combobox",{name:"Jenis transaksi",exact:true}).selectOption("income");
@@ -250,6 +250,33 @@ test("kalkulator membawa total produk tanpa otomatis membebankan biaya",async({p
   await expect(page.getByLabel("Transaksi tercatat",{exact:true})).toContainText("Belum ada transaksi");
 });
 
+test("menus share one dashboard and preserve unfinished forms", async ({ page }) => {
+  await page.goto(base);
+  await page.getByRole("button", { name: "Coba dengan 3 lahan contoh" }).click();
+  const documents: string[] = [];
+  page.on("request", request => { if (request.isNavigationRequest() && request.frame() === page.mainFrame()) documents.push(request.url()); });
+  const menu = page.getByRole("navigation", { name: "Menu utama" });
+  await menu.getByRole("button", { name: "Klinik tanaman", exact: true }).click();
+  await page.getByLabel("Catatan gejala", { exact: true }).fill("Catatan yang belum disimpan");
+  await menu.getByRole("button", { name: "Buku kas tani", exact: true }).click();
+  await page.getByLabel("Nama produk harga", { exact: true }).fill("Harga belum disimpan");
+  await menu.getByRole("button", { name: "Riwayat penyakit", exact: true }).click();
+  await expect(page.getByRole("button", { name: "Simpan pengamatan" })).toBeVisible();
+  await menu.getByRole("button", { name: "Klinik tanaman", exact: true }).click();
+  await expect(page.getByRole("textbox", { name: "Catatan gejala", exact: true })).toHaveValue("Catatan yang belum disimpan");
+  await menu.getByRole("button", { name: "Buku kas tani", exact: true }).click();
+  await expect(page.getByLabel("Nama produk harga", { exact: true })).toHaveValue("Harga belum disimpan");
+  await expect(page.getByRole("main")).toHaveCount(1);
+  expect(new URL(page.url()).pathname).toBe(prefix + "/");
+  expect(documents).toEqual([]);
+  await page.reload();
+  await expect(menu.getByRole("button", { name: "Buku kas tani", exact: true })).toHaveAttribute("aria-pressed", "true");
+  await page.goto(base + "riwayat/");
+  await expect(menu.getByRole("button", { name: "Riwayat penyakit", exact: true })).toHaveAttribute("aria-pressed", "true");
+  await menu.getByRole("button", { name: "Lahan saya", exact: true }).click();
+  await expect(page.locator(".farm-card")).toHaveCount(3);
+});
+
 test("sidebar stays reachable on short screens and retains large touch targets",async({page})=>{
   await page.setViewportSize({width:1366,height:768});await page.goto(base);
   await expect(page.getByRole("button",{name:"Coba dengan 3 lahan contoh"})).toBeVisible();
@@ -259,7 +286,7 @@ test("sidebar stays reachable on short screens and retains large touch targets",
     const footer=page.getByRole("link",{name:/Panduan produk/});
     const footerBox=await footer.boundingBox();expect(footerBox!.y).toBeGreaterThanOrEqual(0);expect(footerBox!.y+footerBox!.height).toBeLessThanOrEqual(height);
     await page.getByRole("button",{name:/Lahan saya/}).focus();
-    const last=page.getByRole("link",{name:/Riwayat penyakit/});await last.focus();
+    const last=page.getByRole("button",{name:/Riwayat penyakit/});await last.focus();
     const bounds=await last.boundingBox();const scroll=await page.locator('.sidebar-scroll').boundingBox();
     expect(bounds!.y).toBeGreaterThanOrEqual(scroll!.y-1);expect(bounds!.y+bounds!.height).toBeLessThanOrEqual(scroll!.y+scroll!.height+1);
     expect(bounds!.height).toBeGreaterThanOrEqual(64);

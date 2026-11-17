@@ -2,17 +2,18 @@
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { ArrowDownLeft, ArrowUpRight, Wallet, TrendingUp, Plus } from "lucide-react";
 import type { CashEntry, ProductPrice, RecordFilter } from "@agri/contracts";
+import { DashboardLink } from "../dashboard-navigation";
 import { useFarmRecords } from "../../lib/use-farm-records";
 import { financeSummary, inRange, usageCost, validatePrice, validateCash } from "../../../../backend/src/records/domain";
 import { RecordsShell, Label, Filters, StorageNote, field, button, card, rp, today, number } from "./common";
 
-export default function FinanceDashboard(){
-  const store=useFarmRecords();const [filter,setFilter]=useState<RecordFilter>({});
+export default function FinanceDashboard({active=true}:{active?:boolean}={}){
+  const store=useFarmRecords(active);const [filter,setFilter]=useState<RecordFilter>({});
   const [farmId,setFarm]=useState(""),[date,setDate]=useState(today),[kind,setKind]=useState("usage");
   const [productId,setProduct]=useState(""),[used,setUsed]=useState(""),[amount,setAmount]=useState(""),[description,setDescription]=useState("");
   const [name,setName]=useState(""),[unit,setUnit]=useState<"ml"|"g">("ml"),[pack,setPack]=useState(""),[price,setPrice]=useState("");
   const [error,setError]=useState(""),[draft,setDraft]=useState<{name:string;unit:string;quantity:number}|null>(null);
-  useEffect(()=>{try{const raw=sessionStorage.getItem("cyphera:cash-draft");if(!raw)return;const d=JSON.parse(raw);if(typeof d.name==="string"&&["ml","g"].includes(d.unit)&&Number.isFinite(d.quantity)&&d.quantity>0){setDraft(d);setUsed(String(d.quantity));}sessionStorage.removeItem("cyphera:cash-draft");}catch{/* Draft is optional and never writes a transaction. */}},[]);
+  useEffect(()=>{if(!active)return;try{const raw=sessionStorage.getItem("cyphera:cash-draft");if(!raw)return;const d=JSON.parse(raw);if(typeof d.name==="string"&&["ml","g"].includes(d.unit)&&Number.isFinite(d.quantity)&&d.quantity>0){setDraft(d);setUsed(String(d.quantity));}sessionStorage.removeItem("cyphera:cash-draft");}catch{/* Draft is optional and never writes a transaction. */}},[active]);
   const selected=store.data.prices.find(p=>p.id===productId);
   const chosenFarm=farmId || store.farms[0]?.id || "";
   const report=useMemo(()=>{try{return {rows:financeSummary(store.farms.map(f=>f.id),store.data.cash,filter),error:""};}catch{return {rows:[],error:"Periksa rentang tanggal. Tanggal awal harus sebelum tanggal akhir."};}},[store.farms,store.data.cash,filter]);
@@ -37,7 +38,7 @@ export default function FinanceDashboard(){
     <section className={card}><Filters farms={store.farms} value={filter} onChange={setFilter}/>{report.error&&<p role="alert" className="mt-4 text-red-800">{report.error}</p>}</section>
     <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">{[{label:"Pengeluaran",value:rp(totals.expenses),Icon:ArrowUpRight},{label:"Pendapatan panen",value:rp(totals.revenue),Icon:ArrowDownLeft},{label:"Laba bersih tercatat",value:rp(profit),Icon:Wallet},{label:"ROI tercatat",value:roi===null?"Belum dihitung":`${roi.toLocaleString("id-ID",{maximumFractionDigits:2})}%`,Icon:TrendingUp}].map(({label,value,Icon})=><div key={label} className={card}><Icon size={22} className="text-emerald-800"/><p className="mt-3 text-xs font-semibold text-slate-700">{label}</p><strong className="mt-2 block break-words text-xl sm:text-2xl">{value}</strong></div>)}</div>
     <p className="text-sm leading-6 text-slate-700">Laba = pendapatan − pengeluaran. ROI = laba ÷ pengeluaran × 100%. ROI belum dihitung jika biaya nol. Masukkan biaya tenaga kerja, pupuk, dan biaya lain agar hasil lebih lengkap. Biaya agenda tidak otomatis masuk ke buku kas.</p>
-    {!store.loading&&!store.farms.length&&<div className={card}><h2 className="text-xl font-bold">Tambahkan lahan terlebih dahulu.</h2><a className={`${button} mt-4`} href="../">Buka Lahan saya</a></div>}
+    {!store.loading&&!store.farms.length&&<div className={card}><h2 className="text-xl font-bold">Tambahkan lahan terlebih dahulu.</h2><DashboardLink className={`${button} mt-4`} to="lahan">Buka Lahan saya</DashboardLink></div>}
     <div className="grid items-start gap-6 lg:grid-cols-[1.2fr_1fr]">
       <form className={card} onSubmit={saveCash} noValidate aria-label="Tambah transaksi"><h2 className="text-2xl font-bold">Catat transaksi</h2><p className="mt-2 text-sm text-slate-700">Satu transaksi untuk satu blok lahan.</p>
         {draft&&<p className="mt-4 rounded-xl bg-lime-100 p-4 text-sm leading-6">Dari kalkulator: <strong>{draft.name}, {draft.quantity.toLocaleString("id-ID")} {draft.unit}</strong>. Ini kebutuhan total produk, bukan dosis per tangki. Pilih harga produk yang sama dan konfirmasi pemakaian nyata sebelum menyimpan.</p>}

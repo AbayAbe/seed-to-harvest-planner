@@ -1,5 +1,8 @@
 import { test, expect } from "@playwright/test";
 import sharp from "sharp";
+import { masukApi } from "./helpers";
+
+test.beforeEach(async ({ page }) => { await masukApi(page); });
 
 test("dashboard klinik menyimpan pengamatan tanpa mengirim foto ke API", async ({ page }) => {
   const calls: string[] = [];
