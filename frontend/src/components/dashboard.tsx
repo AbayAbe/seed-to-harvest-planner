@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { ArrowLeft, ArrowUpRight, CalendarDays, FlaskConical, Leaf, LogOut, MapPinned, Sprout, Wallet, History, Stethoscope, BookOpen } from "lucide-react";
+import ThemeSwitcher from "./theme-switcher";
 import KalkulatorDosis from "./tank-mix-calculator";
 import PlannerTimeline from "./planner-timeline";
 import type { CatalogResponse, Lahan, Pengguna, SesiJuragan } from "@agri/contracts";
@@ -84,7 +85,7 @@ function RuangJuragan({ pengguna, onKeluar, initialView }: { pengguna: Pengguna;
       </aside>
 
       <div className="app-content">
-        <header className="topbar juragan-topbar"><p><span className="hidden sm:inline">Perencanaan <span className="mx-3 text-[#708078]">/</span></span><strong>{judul}</strong></p><div className="flex items-center gap-3"><span className="status-pill"><span /> {view === "tank-mix" ? "Dosis dari label" : view === "klinik" ? "Pengamatan tanaman" : view === "keuangan" ? "Buku kas" : view === "riwayat" ? "Riwayat pengamatan" : view === "panduan" ? "Ensiklopedia" : "Cuaca simulasi"}</span>{process.env.NEXT_PUBLIC_DEMO_STATIC !== "true" && <button type="button" className="logout-button" onClick={keluar} disabled={keluarSibuk}><LogOut size={20}/>{keluarSibuk ? "Tunggu…" : "Keluar"}</button>}</div></header>
+        <header className="topbar juragan-topbar"><p><span className="hidden sm:inline">Perencanaan <span className="mx-3 text-[#708078]">/</span></span><strong>{judul}</strong></p><div className="topbar-actions"><ThemeSwitcher/><span className="status-pill"><span /> {view === "tank-mix" ? "Dosis dari label" : view === "klinik" ? "Pengamatan tanaman" : view === "keuangan" ? "Buku kas" : view === "riwayat" ? "Riwayat pengamatan" : view === "panduan" ? "Ensiklopedia" : "Cuaca simulasi"}</span>{process.env.NEXT_PUBLIC_DEMO_STATIC !== "true" && <button type="button" className="logout-button" onClick={keluar} disabled={keluarSibuk}><LogOut size={20}/>{keluarSibuk ? "Tunggu…" : "Keluar"}</button>}</div></header>
         <main id="main-content" tabIndex={-1} className="workspace">
           {process.env.NEXT_PUBLIC_DEMO_STATIC === "true" && plannerView && <p className="rounded-xl bg-green-100 p-5 mb-5 text-slate-900"><strong>Penyimpanan di perangkat ini.</strong> Data lahan hanya tersimpan di perangkat ini. Cuaca adalah simulasi. Data hilang jika penyimpanan situs dihapus.</p>}
           {galatKeluar && <p role="alert" className="error-message mb-5">{galatKeluar}</p>}

@@ -26,6 +26,51 @@ test.beforeAll(async () => {
 });
 test.afterAll(async () => { await new Promise<void>(resolve => server.close(() => resolve())); });
 
+test("theme persists, follows system and covers every dashboard panel",async({page})=>{
+  const errors:string[]=[];page.on("pageerror",e=>errors.push(e.message));
+  await page.emulateMedia({colorScheme:"dark"});
+  await page.goto(base);
+  await expect(page.locator("html")).toHaveAttribute("data-theme","dark");
+  await page.getByRole("button",{name:"Tema terang",exact:true}).click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme","light");
+  await page.reload();
+  await expect(page.locator("html")).toHaveAttribute("data-theme","light");
+  await page.getByRole("button",{name:"Tema otomatis",exact:true}).click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme","dark");
+  await page.emulateMedia({colorScheme:"light"});
+  await expect(page.locator("html")).toHaveAttribute("data-theme","light");
+  await page.getByRole("button",{name:"Coba dengan 3 lahan contoh"}).click();
+  for(const theme of ["gelap","terang"]){
+    await page.getByRole("button",{name:`Tema ${theme}`,exact:true}).click();
+    for(const [id,name] of [["lahan","Lahan saya"],["timeline","Jadwal tanam"],["tank-mix","Kalkulator dosis"],["klinik","Klinik tanaman"],["keuangan","Buku kas tani"],["riwayat","Riwayat penyakit"],["panduan","Ensiklopedia Saku"]] as const){
+      await page.getByRole("navigation",{name:"Menu utama"}).getByRole("button",{name,exact:true}).click();
+      expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBeTruthy();
+      await page.screenshot({path:`output/ui-review/theme-${theme}-${id}-mobile.png`,fullPage:true});
+    }
+    await page.setViewportSize({width:1440,height:1000});
+    await page.getByRole("navigation",{name:"Menu utama"}).getByRole("button",{name:"Lahan saya",exact:true}).click();
+    const contrast = await page.evaluate(()=>{
+      const luminance=(color:string)=>{
+        const values=(color.match(/[\d.]+/g)??[]).slice(0,3).map(Number).map(n=>{const c=n/255;return c<=0.04045?c/12.92:((c+0.055)/1.055)**2.4;});
+        return values[0]!*0.2126+values[1]!*0.7152+values[2]!*0.0722;
+      };
+      return [".nav-item.is-active",".field-input",".farm-weather-rain",".theme-switcher button[aria-pressed=true]"].map(selector=>{
+        const style=getComputedStyle(document.querySelector(selector)!);
+        const a=luminance(style.color),b=luminance(style.backgroundColor);
+        return {selector,ratio:(Math.max(a,b)+0.05)/(Math.min(a,b)+0.05)};
+      });
+    });
+    for(const item of contrast)expect(item.ratio,item.selector).toBeGreaterThanOrEqual(4.5);
+    await page.screenshot({path:`output/ui-review/theme-${theme}-desktop.png`,fullPage:true});
+    await page.setViewportSize({width:390,height:844});
+  }
+  await page.evaluate(()=>{Storage.prototype.setItem=()=>{throw new DOMException("denied","SecurityError");};});
+  await page.getByRole("button",{name:"Tema gelap",exact:true}).click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme","dark");
+  await expect(page.getByText("Tema diterapkan untuk saat ini; pilihan belum bisa disimpan.")).toBeVisible();
+  expect(errors).toEqual([]);
+});
+
 test("planting completion persists, celebrates briefly and respects reduced motion", async ({page})=>{
   await page.goto(base);
   await page.getByRole("button",{name:"Coba dengan 3 lahan contoh"}).click();

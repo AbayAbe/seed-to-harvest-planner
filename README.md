@@ -342,3 +342,19 @@ Klinik dashboard tetap tanpa analisis AI dan menampilkan pemindai tidak aktif.
 Komponen integrasi API `klinik-tanaman.tsx` memakai laser hanya selama request
 analisis berlangsung. Pengaturan reduced motion menonaktifkan konfeti dan
 gerakan laser. Timer/listener dibersihkan saat komponen dilepas.
+
+## Tema terang dan gelap
+
+Kontrol Terang / Gelap / Otomatis ada di bagian atas dashboard. Pilihan disimpan
+di `cyphera:theme:v1`; mode otomatis mengikuti `prefers-color-scheme`, termasuk
+perubahan saat aplikasi terbuka. Skrip kecil di root layout menerapkan tema
+sebelum tampilan dirender untuk menghindari kilatan tema terang. Jika penyimpanan
+browser dibatasi, tema tetap bisa diganti untuk sesi berjalan dengan pemberitahuan.
+Perubahan preferensi juga disinkronkan antar-tab melalui storage event.
+
+`frontend/src/app/theme.css` mengelola token permukaan, teks, batas, dan adaptasi
+komponen lama maupun utility Tailwind. Foto dan gradasi cairan tidak dibalik.
+Pengujian mencakup semua tujuh panel pada kedua tema, ukuran HP/desktop,
+persistensi, preferensi sistem, kegagalan penyimpanan, serta rasio kontras minimal
+4,5:1 pada menu aktif, input, kartu hujan, dan pilihan tema. Pemeriksaan ini bukan
+audit aksesibilitas menyeluruh untuk semua kondisi konten.
