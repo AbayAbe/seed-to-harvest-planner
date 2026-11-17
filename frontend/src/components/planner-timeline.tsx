@@ -1,5 +1,6 @@
 "use client";
 
+import PlantingTaskCompletion from "./micro-interactions/PlantingTaskCompletion";
 import { CropReference } from "./bayer-reference";
 import { useState } from "react";
 import { differenceInCalendarDays, format, parseISO } from "date-fns";
@@ -66,6 +67,7 @@ export default function PlannerTimeline({ catalog, lahan = null, onOpenCalculato
           const actualDay = differenceInCalendarDays(parseISO(task.scheduledDate), parseISO(startDate));
           return <li key={task.id} className={`timeline-item ${task.delayDays ? "is-delayed" : ""}`}>
             <span className="timeline-dot"><Icon size={21}/></span><div className="timeline-content"><button type="button" className="task-button" aria-expanded={isOpen} aria-controls={`detail-${task.phase.id}`} onClick={() => setExpanded(isOpen ? null : task.id)}><span><span className="task-date">{dateLabel(task.scheduledDate, "dd MMM yyyy")} <span>· Hari ke-{actualDay}</span></span><strong>{task.phase.name}</strong><span className="task-product">{task.phase.productName ?? (task.phase.type === "planting" ? seed?.name : task.phase.type === "harvest" ? "Titik panen simulasi" : task.phase.type === "monitoring" ? "Periksa kondisi di lahan" : "Produk belum ditentukan")}</span></span><ChevronDown size={20} className={isOpen ? "rotate-180" : ""}/></button>
+              {lahan && seedId === lahan.seedId && startDate === lahan.tanggalTanam && <PlantingTaskCompletion farmId={lahan.id} phaseId={task.phase.id} startDate={startDate} title={task.phase.name} date={task.scheduledDate}/>}
               <div className="task-badges"><span className={task.delayDays ? "badge badge-amber" : "badge badge-green"}>{task.delayDays ? <><ArrowRight size={13}/> Bergeser {task.delayDays} hari</> : <><Check size={13}/> Sesuai rencana</>}</span><span className="weather-label"><WeatherIcon size={15}/>{weatherLabels[task.forecast.condition]}</span></div>
               {isOpen && <div id={`detail-${task.phase.id}`} className="task-details"><p><strong>Rencana awal:</strong> {dateLabel(task.originalDate)} (hari ke-{task.phase.dayOffset}).</p>{task.delayDays > 0 ? <p><strong>Alasan perubahan:</strong> prakiraan hujan pada jadwal sebelumnya. Jadwal baru sudah diperiksa kembali.</p> : <p>Jadwal tetap mengikuti tanggal tanam yang Anda pilih.</p>}<p>Prakiraan pada tanggal kegiatan: {weatherLabels[task.forecast.condition].toLowerCase()} (simulasi).</p><p>{task.phase.note ?? "Kegiatan ini merupakan contoh perencanaan. Sesuaikan dengan kebutuhan tanaman, kondisi lahan, serta label produk."}</p>{task.forecast.condition === "Rain" && <p>Aturan tunda otomatis hanya berlaku pada aplikasi produk. Kegiatan ini tetap perlu ditinjau sesuai kondisi hujan di lapangan.</p>}</div>}
             </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from "react";
+import AIScanner from "./micro-interactions/AIScanner";
 import { Camera, Upload, ScanLine, Leaf, LoaderCircle, ShieldCheck, FlaskConical, ArrowRight, RotateCcw } from "lucide-react";
 import type { ClinicCrop, ClinicResult } from "@agri/contracts";
 
@@ -96,7 +97,7 @@ export default function KlinikTanaman({ farmId }: { farmId?: string } = {}) {
       <form onSubmit={submit} className="min-w-0 rounded-3xl border border-slate-200 bg-white p-6 sm:p-8" aria-label="Analisis foto tanaman">
         <h2 className="text-2xl font-bold">Foto tanaman Anda</h2><p className="mt-2 text-sm leading-6 text-slate-700">Ambil bagian yang bergejala, fokus tajam, dengan cahaya alami. Hindari wajah dan informasi pribadi.</p>
         <div className="mt-5 overflow-hidden rounded-2xl border-2 border-dashed border-emerald-200 bg-emerald-50">
-          {preview ? <img src={preview} alt="Foto tanaman yang dipilih untuk dianalisis" className="aspect-[4/3] w-full object-contain" onError={() => { setFile(null); setError("Foto tidak dapat dibuka. Pilih foto JPG lain."); }}/>
+          {busy ? <AIScanner>{preview && <img src={preview} alt="Foto tanaman sedang dianalisis"/>}</AIScanner> : preview ? <img src={preview} alt="Foto tanaman yang dipilih untuk dianalisis" className="aspect-[4/3] w-full object-contain" onError={() => { setFile(null); setError("Foto tidak dapat dibuka. Pilih foto JPG lain."); }}/>
             : <div className="flex aspect-[4/3] flex-col items-center justify-center gap-4 p-6 text-center"><div className="rounded-2xl bg-white p-5"><ScanLine size={44} className="text-emerald-800"/></div><strong>Daun, batang, atau bagian bergejala</strong><span className="text-sm text-slate-700">JPG, PNG, WebP · Maksimal 5 MB</span></div>}
         </div>
         <input ref={camera} type="file" accept="image/jpeg,image/png,image/webp" capture="environment" onChange={choose} className="hidden" aria-label="Ambil foto tanaman"/>

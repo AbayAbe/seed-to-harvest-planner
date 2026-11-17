@@ -26,6 +26,37 @@ test.beforeAll(async () => {
 });
 test.afterAll(async () => { await new Promise<void>(resolve => server.close(() => resolve())); });
 
+test("planting completion persists, celebrates briefly and respects reduced motion", async ({page})=>{
+  await page.goto(base);
+  await page.getByRole("button",{name:"Coba dengan 3 lahan contoh"}).click();
+  const openPlan=async()=>{
+    await page.getByRole("navigation",{name:"Menu utama"}).getByRole("button",{name:"Lahan saya",exact:true}).click();
+    await page.getByRole("article",{name:"Lahan Padi B"}).getByRole("button",{name:"Lihat Jadwal Tanam & Obat"}).click();
+  };
+  await openPlan();
+  const check=page.locator("#timeline-panel").getByRole("checkbox").first();
+  await expect(check).toBeEnabled();
+  await check.click();
+  await expect(check).toBeChecked();
+  await expect(page.locator("canvas")).toBeVisible();
+  await page.screenshot({path:"output/ui-review/animated-schedule.png",fullPage:true});
+  await expect(page.locator("canvas")).toHaveCount(0,{timeout:5000});
+  await page.reload();await openPlan();
+  await expect(check).toBeChecked();
+  await expect(page.locator("canvas")).toHaveCount(0);
+  await check.click();
+  await page.emulateMedia({reducedMotion:"reduce"});
+  await check.click();
+  await expect(check).toBeChecked();
+  await expect(page.locator("canvas")).toHaveCount(0);
+  await check.click();
+  await page.evaluate(()=>{Storage.prototype.setItem=()=>{throw new DOMException("full","QuotaExceededError");};});
+  await check.click();
+  await expect(check).not.toBeChecked();
+  await expect(page.locator("#timeline-panel").getByRole("alert")).toContainText("belum tersimpan");
+  await expect(page.locator("canvas")).toHaveCount(0);
+});
+
 test("pocket encyclopedia saves references, compares three products and links crops", async ({page})=>{
   const errors:string[]=[];page.on("pageerror",e=>errors.push(e.message));
   await page.goto(base+"#panduan");
@@ -111,6 +142,9 @@ test("akses langsung: lahan, cuaca, jadwal, dosis, dan penyimpanan tanpa API", a
   await page.getByRole("button", { name: "Hitung campuran", exact: true }).click();
   await expect(page.locator(".repeat-callout")).toContainText("14×");
   await expect(page.locator(".recipe-amount").first()).toContainText("28,57");
+  await expect(page.getByRole("meter",{name:"Isi air setiap pengisian tangki"})).toHaveAttribute("aria-valuenow", /95\.238/);
+  await expect.poll(async()=>page.getByRole("meter").locator("div").first().evaluate(el=>new DOMMatrix(getComputedStyle(el).transform).m22)).toBeGreaterThan(0.95);
+  await page.screenshot({path:"output/ui-review/animated-tank.png",fullPage:true});
   await page.reload();
   await expect(page.locator(".farm-card")).toHaveCount(3);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBeTruthy();

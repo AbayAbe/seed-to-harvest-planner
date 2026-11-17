@@ -327,3 +327,18 @@ dari data katalog, bukan mengasumsikan semua produk cocok untuk semua tanaman.
 Pemeriksaan: `npm run typecheck`, `npm run build:pages`, `npm run test:pages`.
 Tes browser mencakup bookmark setelah reload, penyimpanan rusak/penuh,
 pembanding, pencarian, direktori tanaman, serta regresi handoff fitur lama.
+
+## Animasi interaksi
+
+Komponen di `frontend/src/components/micro-interactions` menggunakan
+`framer-motion` dan `react-confetti`. Kalkulator menampilkan rasio air per
+pengisian terhadap kapasitas tangki; mengubah input mengosongkan hasil lama.
+Jadwal yang dibuka dari lahan tersimpan menyediakan centang selesai selama
+tanaman dan tanggal mulai sesuai lahan. Status ditulis ke Agenda Kerja dan
+ikut cadangan workspace; tanggal kegiatan adalah tanggal rencana. Konfeti
+hanya muncul setelah penyimpanan berhasil, selama tiga detik.
+
+Klinik dashboard tetap tanpa analisis AI dan menampilkan pemindai tidak aktif.
+Komponen integrasi API `klinik-tanaman.tsx` memakai laser hanya selama request
+analisis berlangsung. Pengaturan reduced motion menonaktifkan konfeti dan
+gerakan laser. Timer/listener dibersihkan saat komponen dilepas.

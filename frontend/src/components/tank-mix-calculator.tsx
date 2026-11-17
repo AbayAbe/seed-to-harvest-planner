@@ -4,8 +4,9 @@ import { useEffect, useId, useMemo, useRef, useState, type FormEvent } from "rea
 import { ArrowRight, ArrowUpRight, Beaker, Check, Droplets, FlaskConical, Info, RotateCcw, Scale } from "lucide-react";
 import type { FormErrors, ProductCatalogItem, TankMixResult } from "@agri/contracts";
 import { ApiError, requestApi } from "../lib/api";
-import { EMPTY_TANK_MIX, validateTankMix, formatApproximate, formatQuantity, type TankMixForm } from "../lib/tank-mix/form";
+import { EMPTY_TANK_MIX, parseDecimal, validateTankMix, formatApproximate, formatQuantity, type TankMixForm } from "../lib/tank-mix/form";
 
+import AnimatedTank from "./micro-interactions/AnimatedTank";
 import { ProductReference } from "./bayer-reference";
 import { useDashboardNavigation } from "./dashboard-navigation";
 
@@ -108,6 +109,7 @@ export default function KalkulatorDosis({ products: PRODUCT_CATALOG, luasAwal = 
     </form>
 
     <div className="result-column">
+      <AnimatedTank fillPercentage={result ? result.waterPerTank / parseDecimal(form.capacity) * 100 : 0} label={result ? "Isi air setiap pengisian tangki" : "Tangki menunggu hasil perhitungan"} className="mb-5"/>
       <div ref={resultRef} tabIndex={-1} className={`mix-result ${result ? "has-result" : ""}`} aria-label="Hasil perhitungan" aria-busy={pending}>
         <div className="result-header"><span className="light-eyebrow">RESEP PER TANGKI</span><Beaker size={23}/></div>
         {result ? <div><p className="result-product">{product?.name}</p><div className="recipe-amount"><FlaskConical size={22}/><p><strong>{formatApproximate(result.dosePerTank)}</strong><span>{unit} obat</span></p></div><div className="recipe-divider"><span/>dicampur dengan<span/></div><div className="recipe-amount"><Droplets size={22}/><p><strong>{formatApproximate(result.waterPerTank)}</strong><span>liter air</span></p></div><div className="repeat-callout"><span>{formatQuantity(result.numberOfTanks)}×</span><p>pengisian tangki<br/><strong>dengan takaran yang sama</strong></p></div><p className="result-explanation">Tangki {form.capacity} liter tidak harus diisi penuh. Gunakan jumlah air di atas agar total campuran tetap sesuai.</p></div> : <div className="result-empty"><div className="empty-beaker"><Beaker size={55} strokeWidth={1}/><Droplets size={23}/></div><h2>{pending ? "Sedang menghitung…" : hasCalculated ? "Angka berubah." : "Resep Anda, di sini."}</h2><p>{pending ? "Tunggu sebentar. Takaran Anda sedang dihitung." : hasCalculated ? "Tekan Hitung campuran untuk memperbarui hasil dengan angka yang baru." : "Isi rincian di samping, lalu tekan Hitung campuran untuk melihat takaran setiap tangki."}</p><div className="result-progress" aria-label={`${completed} dari 5 isian lengkap`}>{[1, 2, 3, 4, 5].map((n) => <span key={n} className={n <= completed ? "filled" : ""}/>)}</div><small>{completed} dari 5 isian lengkap</small></div>}
