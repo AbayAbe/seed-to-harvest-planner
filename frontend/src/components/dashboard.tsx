@@ -11,7 +11,7 @@ import LoginNomorHp from "./juragan/login-nomor-hp";
 import DashboardJuragan from "./juragan/dashboard-juragan";
 import DashboardProfesional from "./juragan/dashboard-profesional";
 
-import BayerLibrary from "./bayer-library";
+import Encyclopedia from "./encyclopedia";
 import KlinikDashboard from "./klinik-dashboard";
 import FinanceDashboard from "./records/finance-dashboard";
 import DiseaseDashboard from "./records/disease-dashboard";
@@ -57,7 +57,7 @@ function RuangJuragan({ pengguna, onKeluar, initialView }: { pengguna: Pengguna;
     { id: "klinik" as const, label: "Klinik tanaman", detail: "Kenali gejala dari foto", Icon: Stethoscope },
     { id: "keuangan" as const, label: "Buku kas tani", detail: "Biaya, pendapatan, ROI", Icon: Wallet },
     { id: "riwayat" as const, label: "Riwayat penyakit", detail: "Pantau pola per lahan", Icon: History },
-    { id: "panduan", label: "Panduan Bayer", detail: "Produk, tanaman, referensi", Icon: BookOpen },
+    { id: "panduan", label: "Ensiklopedia Saku", detail: "Produk, gejala, panduan", Icon: BookOpen },
   ];
   const judul = navigation.find(item => item.id === view)!.label;
   const plannerView = view === "timeline" || view === "tank-mix";
@@ -84,7 +84,7 @@ function RuangJuragan({ pengguna, onKeluar, initialView }: { pengguna: Pengguna;
       </aside>
 
       <div className="app-content">
-        <header className="topbar juragan-topbar"><p><span className="hidden sm:inline">Perencanaan <span className="mx-3 text-[#708078]">/</span></span><strong>{judul}</strong></p><div className="flex items-center gap-3"><span className="status-pill"><span /> {view === "tank-mix" ? "Dosis dari label" : view === "klinik" ? "Pengamatan tanaman" : view === "keuangan" ? "Buku kas" : view === "riwayat" ? "Riwayat pengamatan" : view === "panduan" ? "Referensi Bayer" : "Cuaca simulasi"}</span>{process.env.NEXT_PUBLIC_DEMO_STATIC !== "true" && <button type="button" className="logout-button" onClick={keluar} disabled={keluarSibuk}><LogOut size={20}/>{keluarSibuk ? "Tunggu…" : "Keluar"}</button>}</div></header>
+        <header className="topbar juragan-topbar"><p><span className="hidden sm:inline">Perencanaan <span className="mx-3 text-[#708078]">/</span></span><strong>{judul}</strong></p><div className="flex items-center gap-3"><span className="status-pill"><span /> {view === "tank-mix" ? "Dosis dari label" : view === "klinik" ? "Pengamatan tanaman" : view === "keuangan" ? "Buku kas" : view === "riwayat" ? "Riwayat pengamatan" : view === "panduan" ? "Ensiklopedia" : "Cuaca simulasi"}</span>{process.env.NEXT_PUBLIC_DEMO_STATIC !== "true" && <button type="button" className="logout-button" onClick={keluar} disabled={keluarSibuk}><LogOut size={20}/>{keluarSibuk ? "Tunggu…" : "Keluar"}</button>}</div></header>
         <main id="main-content" tabIndex={-1} className="workspace">
           {process.env.NEXT_PUBLIC_DEMO_STATIC === "true" && plannerView && <p className="rounded-xl bg-green-100 p-5 mb-5 text-slate-900"><strong>Penyimpanan di perangkat ini.</strong> Data lahan hanya tersimpan di perangkat ini. Cuaca adalah simulasi. Data hilang jika penyimpanan situs dihapus.</p>}
           {galatKeluar && <p role="alert" className="error-message mb-5">{galatKeluar}</p>}
@@ -100,7 +100,7 @@ function RuangJuragan({ pengguna, onKeluar, initialView }: { pengguna: Pengguna;
           <div id="klinik-panel" hidden={view !== "klinik"}>{visited.includes("klinik") && <KlinikDashboard/>}</div>
           <div id="keuangan-panel" hidden={view !== "keuangan"}>{visited.includes("keuangan") && <FinanceDashboard active={view === "keuangan"}/>}</div>
           <div id="riwayat-panel" hidden={view !== "riwayat"}>{visited.includes("riwayat") && <DiseaseDashboard active={view === "riwayat"}/>}</div>
-          <div id="panduan-panel" hidden={view !== "panduan"}>{visited.includes("panduan") && <BayerLibrary/>}</div>
+          <div id="panduan-panel" hidden={view !== "panduan"}>{visited.includes("panduan") && <Encyclopedia/>}</div>
           <footer className="workspace-footer"><span>Cyphera · Perencana tani</span><span>Rencanakan dengan jelas, gunakan sesuai label.</span></footer>
         </main>
       </div>

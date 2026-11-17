@@ -26,6 +26,69 @@ test.beforeAll(async () => {
 });
 test.afterAll(async () => { await new Promise<void>(resolve => server.close(() => resolve())); });
 
+test("pocket encyclopedia saves references, compares three products and links crops", async ({page})=>{
+  const errors:string[]=[];page.on("pageerror",e=>errors.push(e.message));
+  await page.goto(base+"#panduan");
+  const library=page.locator("#panduan-panel");
+  const sections=library.getByRole("navigation",{name:"Bagian ensiklopedia"});
+  await expect(library.getByRole("heading",{name:"Ensiklopedia Saku",exact:true})).toBeVisible();
+  const list=library.getByRole("region",{name:"Daftar produk Bayer"});
+  await list.getByRole("button",{name:"Simpan",exact:true}).first().click();
+  for(let i=0;i<3;i++)await list.getByRole("button",{name:"Bandingkan",exact:true}).nth(i).click();
+  await expect(list.getByRole("button",{name:"Bandingkan",exact:true}).last()).toBeDisabled();
+  const comparison=library.getByRole("region",{name:"Perbandingan produk"});
+  await expect(comparison.getByRole("article")).toHaveCount(3);
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBeTruthy();
+  await comparison.getByRole("button",{name:"Kosongkan pembanding"}).click();
+  await sections.getByRole("button",{name:"Tanaman",exact:true}).click();
+  const plants=library.getByRole("region",{name:"Tanaman",exact:true});
+  await plants.getByRole("searchbox").fill("Jagung");
+  await expect(plants.getByRole("article")).toHaveCount(1);
+  await plants.getByRole("button",{name:"Simpan",exact:true}).click();
+  await plants.locator("summary").click();
+  await expect(plants).toContainText("Vayego");
+  await sections.getByRole("button",{name:"Hama & Penyakit",exact:true}).click();
+  const diseases=library.getByRole("region",{name:"Hama & Penyakit",exact:true});
+  await diseases.getByRole("searchbox").fill("blas");
+  await expect(diseases.getByRole("article")).toHaveCount(1);
+  await diseases.getByRole("button",{name:"Simpan",exact:true}).click();
+  await diseases.locator("summary").click();
+  await expect(diseases).toContainText("Nitrogen");
+  await page.screenshot({path:"output/ui-review/encyclopedia-article-mobile.png",fullPage:true});
+  await page.reload();
+  await sections.getByRole("button",{name:"Tersimpan (3)",exact:true}).click();
+  const saved=library.getByRole("region",{name:"Tersimpan",exact:true});
+  await expect(saved.getByRole("article")).toHaveCount(3);
+  await saved.getByRole("button",{name:"Tersimpan",exact:true}).first().click();
+  await expect(saved.getByRole("article")).toHaveCount(2);
+  for(const name of ["Panduan Lapangan","Kamus Istilah"]){
+    await sections.getByRole("button",{name,exact:true}).click();
+    await expect(library.getByRole("region",{name,exact:true}).getByRole("article").first()).toBeVisible();
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBeTruthy();
+  }
+  await sections.getByRole("button",{name:"Produk",exact:true}).click();
+  await page.setViewportSize({width:1440,height:1000});
+  await page.screenshot({path:"output/ui-review/encyclopedia-desktop.png",fullPage:true});
+  expect(errors).toEqual([]);
+});
+
+test("pocket encyclopedia does not overwrite unreadable bookmarks or report failed writes as saved",async({page})=>{
+  await page.goto(base+"#panduan");
+  await page.evaluate(()=>localStorage.setItem("cyphera:encyclopedia:saved:v1","broken-json"));
+  await page.reload();
+  const library=page.locator("#panduan-panel");
+  await expect(library.getByRole("alert")).toContainText("Data lama tidak ditimpa");
+  await expect(library.getByRole("button",{name:"Simpan",exact:true}).first()).toBeDisabled();
+  expect(await page.evaluate(()=>localStorage.getItem("cyphera:encyclopedia:saved:v1"))).toBe("broken-json");
+  await page.evaluate(()=>localStorage.removeItem("cyphera:encyclopedia:saved:v1"));
+  await page.reload();
+  await expect(library.getByRole("button",{name:"Simpan",exact:true}).first()).toBeEnabled();
+  await page.evaluate(()=>{Storage.prototype.setItem=function(){throw new DOMException("full","QuotaExceededError");};});
+  await library.getByRole("button",{name:"Simpan",exact:true}).first().click();
+  await expect(library.getByRole("alert")).toContainText("Belum berhasil menyimpan");
+  await expect(library.getByRole("button",{name:"Tersimpan (0)",exact:true})).toBeVisible();
+});
+
 test("akses langsung: lahan, cuaca, jadwal, dosis, dan penyimpanan tanpa API", async ({ page, context }) => {
   const errors: string[] = [], failures: string[] = [], apiCalls: string[] = [];
   page.on("pageerror", e => errors.push(e.message));
@@ -280,7 +343,7 @@ test("menus share one dashboard and preserve unfinished forms", async ({ page })
 test("Bayer library filters provenance and transfers identity without guessing rates or prices", async ({page})=>{
   await page.goto(base);
   const nav=page.getByRole("navigation",{name:"Menu utama"});
-  await nav.getByRole("button",{name:"Panduan Bayer",exact:true}).click();
+  await nav.getByRole("button",{name:"Ensiklopedia Saku",exact:true}).click();
   const library=page.locator("#panduan-panel");
   await expect(library.getByText("29 produk ditemukan",{exact:true})).toBeVisible();
   await library.getByRole("combobox",{name:"Status referensi",exact:true}).selectOption("current");
@@ -299,7 +362,7 @@ test("Bayer library filters provenance and transfers identity without guessing r
   await expect(page.getByLabel("Nama produk harga",{exact:true})).toHaveValue("Adengo 315 SC");
   await expect(page.getByRole("combobox",{name:"Satuan produk",exact:true})).toHaveValue("ml");
   await expect(page.getByLabel("Harga kemasan (Rp)",{exact:true})).toHaveValue("");
-  await nav.getByRole("button",{name:"Panduan Bayer",exact:true}).click();
+  await nav.getByRole("button",{name:"Ensiklopedia Saku",exact:true}).click();
   await library.getByRole("button",{name:"Atur ulang pencarian"}).click();
   await library.getByRole("searchbox").fill("tidak-ada-produk");
   await expect(library.getByRole("heading",{name:"Belum ada hasil yang cocok."})).toBeVisible();
@@ -319,7 +382,7 @@ test("Bayer crop references are reading aids and retain explicit application met
   await expect(reference).toContainText("Vayego 200 SC");
   await expect(reference).toContainText("tidak memastikan penyakit");
   await expect(reference).not.toContainText("Tuang");
-  await page.getByRole("navigation",{name:"Menu utama"}).getByRole("button",{name:"Panduan Bayer",exact:true}).click();
+  await page.getByRole("navigation",{name:"Menu utama"}).getByRole("button",{name:"Ensiklopedia Saku",exact:true}).click();
   const library=page.locator("#panduan-panel");
   await library.getByRole("searchbox").fill("immune start");
   const product=library.getByRole("article",{name:"Immune Start 200/80 FS",exact:true});
@@ -337,7 +400,7 @@ test("sidebar stays reachable on short screens and retains large touch targets",
     const footer=page.getByRole("link",{name:/Panduan produk/});
     const footerBox=await footer.boundingBox();expect(footerBox!.y).toBeGreaterThanOrEqual(0);expect(footerBox!.y+footerBox!.height).toBeLessThanOrEqual(height);
     await page.getByRole("button",{name:/Lahan saya/}).focus();
-    const last=page.getByRole("button",{name:"Panduan Bayer",exact:true});await last.focus();
+    const last=page.getByRole("button",{name:"Ensiklopedia Saku",exact:true});await last.focus();
     const bounds=await last.boundingBox();const scroll=await page.locator('.sidebar-scroll').boundingBox();
     expect(bounds!.y).toBeGreaterThanOrEqual(scroll!.y-1);expect(bounds!.y+bounds!.height).toBeLessThanOrEqual(scroll!.y+scroll!.height+1);
     expect(bounds!.height).toBeGreaterThanOrEqual(64);

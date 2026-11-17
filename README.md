@@ -300,3 +300,30 @@ Perbarui data dengan memeriksa identitas formulasi, negara, tanaman, sasaran,
 cara aplikasi, satuan, dan masa berlaku label. Jangan mengganti produk berdasarkan
 pengalihan URL, menyamakan g/l dengan g/ha, atau memakai label negara lain.
 Uji konsistensi: `node --import tsx --test tests/bayer.test.ts tests/api.test.ts`.
+
+## Ensiklopedia Saku
+
+Panduan Bayer kini menjadi Ensiklopedia Saku pada panel `#panduan`, tetap tanpa
+perpindahan halaman atau API tambahan di GitHub Pages. Enam bagian mencakup
+Produk, Tanaman, Hama & Penyakit, Panduan Lapangan, Kamus Istilah, dan Tersimpan.
+Katalog memuat 29 produk, 40 nama tanaman, serta 21 artikel/istilah (8 pengenalan
+gangguan, 5 panduan, 8 istilah). Direktori tanaman menurunkan pasangan sasaran
+dari data katalog, bukan mengasumsikan semua produk cocok untuk semua tanaman.
+
+- `frontend/src/lib/encyclopedia.ts`: ringkasan editorial beserta penerbit dan
+  URL sumber per artikel. Referensi UC IPM, Kementan, Dinas Pertanian Buleleng,
+  IRAC, APVMA, USU, dan EPA digunakan sesuai lingkupnya. Definisi dan biologi
+  dari luar negeri tidak menjadi resep atau aturan penggunaan Indonesia.
+- `encyclopedia.tsx`: navigasi enam bagian, pencarian per bagian, direktori
+  tanaman, dan pembanding identitas maksimal tiga produk.
+- `pocket-actions.tsx`: kontrol simpan dan bandingkan yang dipakai bersama
+  katalog dan artikel; tidak ada siklus impor komponen.
+- Bookmark disimpan di `cyphera:encyclopedia:saved:v1`. Data rusak tidak ditimpa;
+  kegagalan menulis tidak dilaporkan sebagai berhasil. Bookmark hanya lokal
+  browser, belum termasuk ekspor cadangan lahan atau sinkronisasi akun.
+- Pembanding tidak mengurutkan keampuhan, menyarankan pencampuran, atau
+  menyamakan takaran. Handoff kalkulator/buku kas tetap hanya membawa identitas.
+
+Pemeriksaan: `npm run typecheck`, `npm run build:pages`, `npm run test:pages`.
+Tes browser mencakup bookmark setelah reload, penyimpanan rusak/penuh,
+pembanding, pencarian, direktori tanaman, serta regresi handoff fitur lama.
