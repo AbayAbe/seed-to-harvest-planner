@@ -26,6 +26,43 @@ test.beforeAll(async () => {
 });
 test.afterAll(async () => { await new Promise<void>(resolve => server.close(() => resolve())); });
 
+test("farmer rewards reads QR locally without granting unverified spins",async({page})=>{
+  const errors:string[]=[];page.on("pageerror",e=>errors.push(e.message));
+  const outbound:string[]=[];
+  await page.goto(base+"#undian");
+  page.on("request",r=>{if(!r.url().startsWith(new URL(base).origin)&&!r.url().startsWith("blob:"))outbound.push(r.url());});
+  const panel=page.locator("#undian-panel");
+  await expect(panel.getByRole("heading",{name:"Roda undian petani"})).toBeVisible();
+  await expect(panel.getByRole("button",{name:"Putar undian",exact:true})).toBeDisabled();
+  await panel.getByLabel("Gambar QR atau barcode").setInputFiles("tests/fixtures/scanner-test.png");
+  await expect(panel.getByRole("status")).toContainText("123456");
+  await expect(panel.getByRole("status")).toContainText("Belum divalidasi");
+  await panel.getByRole("button",{name:"Hapus kode",exact:true}).click();
+  await panel.getByLabel("Atau ketik kode kemasan").fill("https://example.invalid/redeem?token=secret123456");
+  await panel.getByRole("button",{name:"Gunakan kode",exact:false}).click();
+  await expect(panel.getByRole("status")).not.toContainText("secret");
+  await expect(panel.getByRole("link")).toHaveCount(0);
+  await expect(panel.getByRole("button",{name:"Putar undian",exact:true})).toBeDisabled();
+  await panel.getByLabel("Gambar QR atau barcode").setInputFiles({name:"bad.txt",mimeType:"text/plain",buffer:Buffer.from("not a code")});
+  await expect(panel.getByRole("alert")).toContainText("maksimal 5 MB");
+  await page.evaluate(()=>{navigator.mediaDevices.getUserMedia=async()=>{throw new DOMException("blocked","NotAllowedError");};});
+  await panel.getByRole("button",{name:"Buka kamera",exact:true}).click();
+  await expect(panel.getByRole("alert")).toContainText("Izin kamera belum diberikan");
+  await page.getByRole("navigation",{name:"Menu utama"}).getByRole("button",{name:"Lahan saya",exact:true}).click();
+  await page.getByRole("navigation",{name:"Menu utama"}).getByRole("button",{name:"Undian petani",exact:true}).click();
+  await expect(panel.getByRole("region",{name:"Pemindai kode produk"})).toHaveCount(0);
+  for(const theme of ["gelap","terang"]){
+    await page.getByRole("button",{name:`Tema ${theme}`,exact:true}).click();
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBeTruthy();
+    await page.screenshot({path:`output/ui-review/rewards-${theme}-mobile.png`,fullPage:true});
+  }
+  await page.setViewportSize({width:1440,height:1000});
+  await page.screenshot({path:"output/ui-review/rewards-desktop.png",fullPage:true});
+  await page.reload();
+  await expect(panel.getByRole("status")).toHaveCount(0);
+  expect(outbound).toEqual([]);expect(errors).toEqual([]);
+});
+
 test("theme persists, follows system and covers every dashboard panel",async({page})=>{
   const errors:string[]=[];page.on("pageerror",e=>errors.push(e.message));
   await page.emulateMedia({colorScheme:"dark"});

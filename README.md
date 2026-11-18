@@ -358,3 +358,29 @@ Pengujian mencakup semua tujuh panel pada kedua tema, ukuran HP/desktop,
 persistensi, preferensi sistem, kegagalan penyimpanan, serta rasio kontras minimal
 4,5:1 pada menu aktif, input, kartu hujan, dan pilihan tema. Pemeriksaan ini bukan
 audit aksesibilitas menyeluruh untuk semua kondisi konten.
+
+## Undian petani — antarmuka program resmi
+
+Panel `#undian` menyiapkan alur pindai → validasi → satu putaran. Sesuai cakupan
+saat ini, nama program resmi Bayer, koneksi validasi, hadiah, dan aturan klaim
+belum tersedia. Tombol putar terkunci; tidak ada pemberian hak, pengacakan hadiah,
+atau penandaan kode terpakai di browser. Roda dan riwayat adalah tampilan persiapan.
+
+- QR/barcode dibaca lokal menggunakan `@zxing/browser`, dimuat saat diperlukan.
+  Kamera meminta izin saat pengguna menekan tombol dan dihentikan ketika ditutup,
+  kode ditemukan, berpindah panel, atau komponen dilepas.
+- Alternatif: unggah JPG/PNG/WebP maksimal 5 MB atau masukkan kode manual.
+- Tautan hasil pindai tidak dibuka otomatis, kode tidak dikirim ke layanan luar,
+  tidak ditulis ke localStorage, dan hanya ditampilkan enam karakter terakhir.
+  Foto memakai object URL sementara yang dilepas setelah pembacaan.
+- `tests/fixtures/scanner-test.png` berisi QR sintetis
+  `CYPHERA-SCANNER-TEST-123456`; bukan kode resmi atau kupon berhadiah.
+
+Sebelum mengaktifkan program, dapatkan dokumentasi/API resmi dan autentikasinya,
+identitas program, periode, syarat peserta, katalog hadiah, peluang serta alur klaim.
+Backend harus memvalidasi kode unik dan menjalankan konsumsi hak putar beserta
+pencatatan hasil dalam transaksi atomik dengan constraint unik. Permintaan ulang
+harus idempotent: mengembalikan hasil yang sama, bukan mengundi lagi. Pemindaian
+barcode produk umum tidak boleh dianggap bukti kemasan unik atau kelayakan.
+Jangan menaruh daftar kode sah, kredensial provider, penentu hadiah, atau stok
+hadiah di bundle GitHub Pages. Integrasi server ini belum diimplementasikan.

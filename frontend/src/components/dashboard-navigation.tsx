@@ -1,6 +1,6 @@
 "use client";
 import { createContext, useContext, type ReactNode } from "react";
-export type DashboardView = "lahan" | "timeline" | "tank-mix" | "klinik" | "keuangan" | "riwayat" | "panduan";
+export type DashboardView = "lahan" | "timeline" | "tank-mix" | "klinik" | "keuangan" | "riwayat" | "panduan" | "undian";
 export interface ProductSelection { productId: string; view: DashboardView; token: number }
 export const DashboardNavigation = createContext<{
   view:DashboardView;
